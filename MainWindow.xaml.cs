@@ -41,8 +41,15 @@ namespace SENG403
         public MainWindow()
         {
             InitializeComponent();
+            this.KeyUp += MainWindow_KeyUp;
             updateTime();
             initTimerElements();
+        }
+
+        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+                Application.Current.Shutdown();
         }
 
         private void initTimerElements()

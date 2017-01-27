@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SENG403"
         mc:Ignorable="d"
-        Title="Clock" Height="600" Width="725">
+        Title="Clock" Height="600" Width="725" WindowStyle="None" ResizeMode="NoResize" WindowState="Maximized">
     <Canvas Background="#FF141734">
         <Image x:Name="clock_canvas_image" Height="300" Canvas.Left="70" Canvas.Top="60" Width="300" Source="pack://application:,,,/Resource/clock_canvas.png"/>
         <Image x:Name="second_hand_image" Height="300" Canvas.Left="70" Canvas.Top="60" Width="300" Source="pack://application:,,,/Resource/second_hand.png"/>
