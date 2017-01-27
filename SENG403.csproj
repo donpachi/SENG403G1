@@ -100,10 +100,10 @@
     <Resource Include="Resource\clock_canvas.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\minute_hand.png" />
+    <Resource Include="Resource\hour_hand.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\hour_hand.png" />
+    <Resource Include="Resource\minute_hand.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resource\second_hand.png" />
