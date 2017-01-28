@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <TextBox x:Name="timeLabel" HorizontalAlignment="Left" Height="55" Margin="35,44,0,0" TextWrapping="Wrap" Text="&#xD;&#xA;&#xD;&#xA;" VerticalAlignment="Top" Width="446" FontSize="18"/>
+
     </Grid>
 </Window>
