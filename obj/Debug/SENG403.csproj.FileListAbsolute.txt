@@ -1,1 +1,15 @@
 C:\Users\Aaron\Documents\Seng\SENG403\bin\Debug\SENG403.exe.config
+D:\School\SENG403\SENG403G1\bin\Debug\SENG403.exe.config
+D:\School\SENG403\SENG403G1\obj\Debug\SENG403.csprojResolveAssemblyReference.cache
+D:\School\SENG403\SENG403G1\obj\Debug\MainWindow.g.cs
+D:\School\SENG403\SENG403G1\obj\Debug\App.g.cs
+D:\School\SENG403\SENG403G1\obj\Debug\SENG403_MarkupCompile.cache
+D:\School\SENG403\SENG403G1\obj\Debug\SENG403_MarkupCompile.lref
+D:\School\SENG403\SENG403G1\bin\Debug\SENG403.exe
+D:\School\SENG403\SENG403G1\bin\Debug\SENG403.pdb
+D:\School\SENG403\SENG403G1\obj\Debug\MainWindow.baml
+D:\School\SENG403\SENG403G1\obj\Debug\SENG403.g.resources
+D:\School\SENG403\SENG403G1\obj\Debug\SENG403.Properties.Resources.resources
+D:\School\SENG403\SENG403G1\obj\Debug\SENG403.csproj.GenerateResource.Cache
+D:\School\SENG403\SENG403G1\obj\Debug\SENG403.exe
+D:\School\SENG403\SENG403G1\obj\Debug\SENG403.pdb

@@ -23,6 +23,10 @@ namespace SENG403
         public MainWindow()
         {
             InitializeComponent();
+
+            SoundModule sound = new SoundModule();
+            sound.playSound();
+           
         }
     }
 }
