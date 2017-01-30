@@ -97,10 +97,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Sounds\squarearp1.mp3" />
+    <None Include="Sounds\squarearp1.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Sounds\squarearp1.wav" />
+    <None Include="Sounds\sawarp1.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

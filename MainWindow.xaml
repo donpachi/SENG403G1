@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <Button x:Name="soundbutton" Content="Button" HorizontalAlignment="Left" Margin="171,201,0,0" VerticalAlignment="Top" Width="158" Height="89" Click="soundbutton_Click"/>
     </Grid>
 </Window>

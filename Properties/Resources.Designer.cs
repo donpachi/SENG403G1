@@ -63,6 +63,15 @@ namespace SENG403.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream sawarp1 {
+            get {
+                return ResourceManager.GetStream("sawarp1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream squarearp1 {
             get {
                 return ResourceManager.GetStream("squarearp1", resourceCulture);

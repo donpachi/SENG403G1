@@ -20,13 +20,26 @@ namespace SENG403
     /// </summary>
     public partial class MainWindow : Window
     {
+        int soundstate = 0;
+        SoundModule sound = new SoundModule();
+
         public MainWindow()
         {
             InitializeComponent();
 
-            SoundModule sound = new SoundModule();
-            sound.playSound();
-           
+        }
+
+        private void soundbutton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sound.isPlaying())
+            {
+                sound.stopSound();
+            }
+            else
+            {
+                sound.playSound();
+            }
+            
         }
     }
 }
