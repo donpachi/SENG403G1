@@ -7,7 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <TextBox x:Name="timeLabel" HorizontalAlignment="Left" Height="55" Margin="35,44,0,0" TextWrapping="Wrap" Text="&#xD;&#xA;&#xD;&#xA;" VerticalAlignment="Top" Width="446" FontSize="18"/>
+        <TextBox x:Name="timeLabel" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="55" Margin="115,44,0,0" TextWrapping="Wrap" Text="&#xD;&#xA;&#xD;&#xA;" VerticalAlignment="Top" Width="245" FontSize="18"/>
+        <TextBox x:Name="setAlarmTextBox" HorizontalAlignment="Left" Height="23" Margin="115,165,0,0" TextWrapping="Wrap" Text="hh:mm:ss" VerticalAlignment="Top" Width="120" GotFocus="setAlarmTextBox_GotFocus" TextDecorations="{x:Null}"/>
+        <Button x:Name="setAlarmButton" Content="Set Alarm" HorizontalAlignment="Left" Margin="35,206,0,0" VerticalAlignment="Top" Width="75" Click="setAlarmButton_Click"/>
+        <ComboBox x:Name="AmPmBox" HorizontalAlignment="Left" Margin="240,165,0,0" VerticalAlignment="Top" Width="120" MaxDropDownHeight="120" AllowDrop="True" Text="AM">
+            <ComboBoxItem x:Name="AM" Content="AM"/>
+            <ComboBoxItem x:Name="PM" Content="PM" HorizontalAlignment="Left" Width="118"/>
+        </ComboBox>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="35,166,0,0" TextWrapping="Wrap" Text="Set Alarm:" VerticalAlignment="Top" Height="22" Width="75"/>
 
     </Grid>
 </Window>

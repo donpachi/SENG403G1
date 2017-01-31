@@ -21,15 +21,22 @@ namespace SENG403
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        // Create a list of Alarms
+        List<Alarm> alarmList;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            // Create a list of Alarms
+            this.alarmList = new List<Alarm>();
 
             // Start the clock
             startclock();
         }
 
-        // The method that creates a tick event and sets the interval
+        // Start the timer, create a tick event and set tick interval to one second
         private void startclock()
         {
             // Create a timer object
@@ -42,26 +49,82 @@ namespace SENG403
         // Tick event that occurs every one second
         private void tickevent(object sender, EventArgs e)
         {
-            // Get the current date and time and convert it to a single string
-            // In the form: 'yyyy-mm-dd hh:mm:ss AM/PM' (i.e: 2017-01-28 12:20:00 PM)
-            String dateAndTime = DateTime.Now.ToString();
+            // Get the CURRENT date and time in the form: 'yyyy-mm-dd hh:mm:ss AM/PM' (i.e: 2017-01-28 12:20:00 PM)
+            DateTime dateAndTime = DateTime.Now;
             
             // An exception for testing purposes
             Exception exception = new Exception();
 
-            // Split the dateAndTime string into an array of two entries, one for date and one for time
-            String[] dateAndTimeArray = dateAndTime.Split(new char[] { ' ' }, 2); // Split at the first occurence of ' ' only
-            String date = dateAndTimeArray[0];  // Store the date in the form: yyyy-mm-dd
-            String time = dateAndTimeArray[1];  // Store the time in the form: hh:mm:ss AM/PM
+            // Get only the time from the DateTime object
+            String time = DateTime.Now.ToLongTimeString();
             timeLabel.Text = time;  // Display only the time on the UI
 
             // Check every second if the current time is the one we're checking for
-            // If so, throw an exception
-            if (time == "12:20:00 PM")
+            // If so, throw an exception (play sound later on)
+            foreach (Alarm alarm in alarmList)
             {
-                throw exception;    // This works
+                // If the current time is one of the alarms, then throw an exception
+                if (DateTime.Now.ToString().Equals(alarm.getDateTime().ToString()))
+                {
+                    throw exception;    // This works
+                }
+            }
+        }
+
+        // Handle the input data once the "set alarm" button is pressed
+        private void setAlarmButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Gather the input information and create a string representation of a DateTime object
+            String alarmTime = DateTime.Now.ToLongDateString() + " " + setAlarmTextBox.Text;
+
+            // Add AM/PM to the time String
+            if (AmPmBox.SelectedIndex == 0)
+            {
+                alarmTime = alarmTime + " AM";
+            } else if (AmPmBox.SelectedIndex == 1)
+            {
+                alarmTime = alarmTime + " PM";
             }
 
+            // Create a new alarm and append it to the alarmList
+            alarmList.Add(new Alarm(DateTime.Parse(alarmTime)));
+
+            // Error checking the format of the input time still has to be handled
         }
+
+        // If the user clicks the alarm time text box, clear it of the default text for convenience
+        private void setAlarmTextBox_GotFocus(object sender, EventArgs e)
+        {
+            setAlarmTextBox.Clear();    // Clear the text box once clicked
+        }
+
+    }
+
+    // The alarm class which holds the required data
+    public class Alarm
+    {
+        String period; // AM or PM setting - may not be necessary
+        String time;
+        String date;
+        DateTime datetime;
+
+        public Alarm(DateTime datetime)
+        {
+            // For setting alarms on specific days, we can use datetime.parse to convert two strings of date and time into one datetime object
+            // We can then compare them using a datetime method
+            this.datetime = datetime;
+            this.period = null; // AM or PM setting
+            this.time = datetime.ToLongTimeString();
+            this.date = datetime.ToLongDateString();
+        }
+
+        // Return the Date and Time this alarm is set to
+        public DateTime getDateTime()
+        {
+            return this.datetime;
+        }
+
+        // For snooze, there are datetime.add{minutes, hours, days, milliseconds, etc} that can be used for snooze functionality
+
     }
 }
