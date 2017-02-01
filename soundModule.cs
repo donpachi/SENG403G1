@@ -12,29 +12,37 @@ namespace SENG403
     class SoundModule
     {
         SoundPlayer player;
-        Boolean playing = false;
+        private Boolean playing = false;    //true when sound is looping, false when not.
+        string[] availableSounds;           //array to hold the filepath of .wav files in the Sounds folder
 
-        //
-        public void playSound()
+
+        // No-argument constructor. Populates the availableSounds array
+        // with .wav files found in the Sounds folder.
+        public SoundModule()
         {
-            //TODO: some way to choose which sound is played
-            // - probably make it so that another class can choose the sound (so user can pick which alarm sound
-            //   should play with the respective alarm
-            Stream theSound = Resources.sawarp1;
+            loadSounds();
+        }
 
+
+        // Makes the SoundPlayer start looping a sound.
+        // Its one parameter is the filepath of the desiried .wav file as a string.
+        public void playSound(string soundPath)
+        {
+            //Stream theSound = Resources.sawarp1;
             try
             {
-                player = new SoundPlayer(theSound);
-                player.PlayLooping();
+                player = new SoundPlayer(soundPath);
+                player.PlayLooping();                       //loops the selected sound until stopSound() is called
                 playing = true;
             }
-            catch(FileNotFoundException)
+            catch (FileNotFoundException)
             {
                 System.Diagnostics.Debug.WriteLine("Error: sound file not found");
             }
         }
 
-        //
+
+        // makes the SoundPlayer stop playing a sound.
         public void stopSound()
         {
             player.Stop();
@@ -42,11 +50,49 @@ namespace SENG403
             player.Dispose();
         }
 
+
+        // Returns whether or not a sound is playing right now.
         public Boolean isPlaying()
         {
             return playing;
         }
 
+
+        // Returns all .wav files in the Sounds directory in a string array.
+        public String[] getSounds()
+        {
+            return availableSounds;
+        }
+
+        // Returns element i in the availableSounds array.
+        public String getSound(int i)
+        {
+            try
+            {
+                return availableSounds[i];
+            }
+            catch (IndexOutOfRangeException)
+            {
+               
+            }
+            return "";
+            
+        }
+
+
+        // populate availableSounds array with the .wav filepaths found in the Sounds folder
+        public void loadSounds()
+        {
+            availableSounds = Directory.GetFiles("Sounds", "*.wav");      //access two directories up to the Sounds folder
+            
+            // STRETCH GOAL: create a popup that informs the user that the Sounds folder has no .wav files in it.
+
+            // for debugging
+            for (int i = 0; i < availableSounds.Length; i++)
+            {
+                System.Diagnostics.Debug.WriteLine(availableSounds[i]);
+            }
+        }
 
     }
 }

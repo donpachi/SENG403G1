@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,26 +21,33 @@ namespace SENG403
     /// </summary>
     public partial class MainWindow : Window
     {
-        int soundstate = 0;
         SoundModule sound = new SoundModule();
+        
 
         public MainWindow()
         {
             InitializeComponent();
-
         }
 
+        // TEMPORARY
+        // This button event simulates what would be done in the UI to select a sound the user wants
+        // for the particular alarm the user is setting up.
         private void soundbutton_Click(object sender, RoutedEventArgs e)
         {
             if (sound.isPlaying())
-            {
                 sound.stopSound();
-            }
-            else
-            {
-                sound.playSound();
+            
+            else{
+                try{
+                    sound.playSound(sound.getSound(0));
+                }
+                catch(Exception)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error: no .wav files in Sounds folder");
+                }
             }
             
         }
+
     }
 }
