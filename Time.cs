@@ -23,7 +23,7 @@ namespace SENG403
         public const double MIN_IN_HR = 60;
     }
 
-    public partial class Time : Window
+    public partial class Time
     {
         public double degreeInterval;
         DispatcherTimer dTimer;
@@ -33,26 +33,15 @@ namespace SENG403
         Image minImage, secImage, hrImage;
         Label timeLabel;
 
-        public Time()
+        public Time(Image min, Image sec, Image hr, Label lb)
         {
-            //minImage = (Image)Application.Current.FindResource("minute_hand_image");
-            //secImage = (Image)Application.Current.FindResource("second_hand_image");
-            //hrImage = (Image)Application.Current.FindResource("hour_hand_image");
-            //timeLabel = (Label)Application.Current.FindResource("time_label");
-            minImage = (Image)this.Resources.FindName("minute_hand_image");
-            secImage = (Image)this.Resources.FindName("second_hand_image");
-            hrImage = (Image)this.Resources.FindName("hour_hand_image");
-            timeLabel = (Label)this.Resources.FindName("time_label");
-
+            minImage = min;
+            secImage = sec;
+            hrImage = hr;
+            timeLabel = lb;
         }
 
-        public void start()
-        {
-            initTimerElements();
-        }
-
-
-        private void initTimerElements()
+        public void Start()
         {
             degreeInterval = (double)(CONSTANTS.DEG_PER_SEC * CONSTANTS.TICK_INTERVAL_MS) / CONSTANTS.MS_IN_SEC;
             dTimer = new DispatcherTimer();
@@ -62,6 +51,7 @@ namespace SENG403
             synchronizeHands();
             dTimer.Start();
         }
+
 
         private void updateTime()
         {
@@ -92,7 +82,6 @@ namespace SENG403
 
         private void renderAngles(RenderMode renderMode)
         {
-
             if (renderMode == RenderMode.RenderMinutes)
             {
                 RotateTransform transform = new RotateTransform(minuteDegrees, minImage.Width / 2, minImage.Height / 2);
@@ -114,7 +103,7 @@ namespace SENG403
                 transform = new RotateTransform(hourDegrees, hrImage.Width / 2, hrImage.Height / 2);
                 hrImage.RenderTransform = transform;
             }
-            else throw new NotImplementedException();
+            else throw new NotImplementedException("Unexpected analog clock render mode");
         }
 
         private void dTimer_Tick(object sender, EventArgs e)
@@ -122,7 +111,6 @@ namespace SENG403
             RotateTransform transform = new RotateTransform(secondDegrees, secImage.Width / 2, secImage.Height / 2);
             secondDegrees = (secondDegrees + degreeInterval) >= 360 ? 0 : secondDegrees + degreeInterval;
             secImage.RenderTransform = transform;
-
 
             if (secondDegrees % CONSTANTS.DEG_PER_SEC == 0)
             {

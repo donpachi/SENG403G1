@@ -27,7 +27,8 @@ namespace SENG403
         {
             InitializeComponent();
             this.KeyUp += MainWindow_KeyUp;
-            time = new Time();
+            time = new Time(minute_hand_image, second_hand_image, hour_hand_image, time_label);
+            time.Start();
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
