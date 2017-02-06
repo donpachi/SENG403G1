@@ -36,6 +36,22 @@ namespace SENG403
             startclock();
         }
 
+        //this ends the alarm and sets it to the next scheduled date if repeat is true, else it deletes the alarm
+        public void endAlarm(Alarm alarm)
+        {
+            if (alarm.getRepeatVal() == true)
+            {
+                alarm.reset();
+            }
+            else { deleteAlarm(alarm); }
+        }
+
+        //this removes the specified alarm from alarmList even if it is set to repeat
+        public void deleteAlarm(Alarm alarm)
+        {
+            alarmList.Remove(alarm);
+        }
+
         // Start the timer, create a tick event and set tick interval to one second
         private void startclock()
         {
@@ -66,7 +82,6 @@ namespace SENG403
                 // If the current time is one of the alarms, then throw an exception
                 if (DateTime.Now.ToString().Equals(alarm.getDateTime().ToString()))
                 {
-                    alarm.reset();
                     throw exception;    // This works
                 }
             }
@@ -88,7 +103,7 @@ namespace SENG403
             }
 
             // Create a new alarm and append it to the alarmList
-            alarmList.Add(new Alarm(DateTime.Parse(alarmTime)));
+            alarmList.Add(new Alarm(DateTime.Parse(alarmTime), false));
 
             // Error checking the format of the input time still has to be handled
         }
@@ -109,8 +124,9 @@ namespace SENG403
         String date;
         DateTime settime;
         DateTime datetime;
+        Boolean repeat;
 
-        public Alarm(DateTime datetime)
+        public Alarm(DateTime datetime, Boolean repeat)
         {
             // For setting alarms on specific days, we can use datetime.parse to convert two strings of date and time into one datetime object
             // We can then compare them using a datetime method
@@ -119,6 +135,7 @@ namespace SENG403
             this.period = null; // AM or PM setting
             this.time = datetime.ToLongTimeString();
             this.date = datetime.ToLongDateString();
+            this.repeat = repeat;
         }
 
         // Return the Date and Time this alarm is set to
@@ -136,5 +153,6 @@ namespace SENG403
         //this resets the alarm to the original pre-snooze configuration
         public void reset() { datetime = settime; }
 
+        public Boolean getRepeatVal() { return repeat; }
     }
 }
