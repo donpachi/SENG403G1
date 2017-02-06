@@ -66,6 +66,7 @@ namespace SENG403
                 // If the current time is one of the alarms, then throw an exception
                 if (DateTime.Now.ToString().Equals(alarm.getDateTime().ToString()))
                 {
+                    alarm.reset();
                     throw exception;    // This works
                 }
             }
@@ -106,6 +107,7 @@ namespace SENG403
         String period; // AM or PM setting - may not be necessary
         String time;
         String date;
+        DateTime settime;
         DateTime datetime;
 
         public Alarm(DateTime datetime)
@@ -113,6 +115,7 @@ namespace SENG403
             // For setting alarms on specific days, we can use datetime.parse to convert two strings of date and time into one datetime object
             // We can then compare them using a datetime method
             this.datetime = datetime;
+            this.settime = datetime;
             this.period = null; // AM or PM setting
             this.time = datetime.ToLongTimeString();
             this.date = datetime.ToLongDateString();
@@ -124,7 +127,14 @@ namespace SENG403
             return this.datetime;
         }
 
-        // For snooze, there are datetime.add{minutes, hours, days, milliseconds, etc} that can be used for snooze functionality
+        //This snoozes the alarm for a set amount of minutes
+        public void snooze(Double minutes)
+        {
+            datetime = DateTime.Now.AddMinutes(minutes);
+        }
+
+        //this resets the alarm to the original pre-snooze configuration
+        public void reset() { datetime = settime; }
 
     }
 }
