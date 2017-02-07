@@ -32,6 +32,7 @@ namespace SENG403
         private string date;
         Image minImage, secImage, hrImage;
         Label timeLabel;
+        Canvas analogCanvas, digiCanvas;
 
         public Time(Image min, Image sec, Image hr, Label lb)
         {
@@ -52,6 +53,12 @@ namespace SENG403
             dTimer.Start();
         }
 
+
+        private void linkResources()
+        {
+            Canvas mCanvas = (Canvas)Application.Current.FindResource("main_canvas");
+
+        }
 
         private void updateTime()
         {
