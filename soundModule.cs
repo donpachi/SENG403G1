@@ -18,6 +18,7 @@ namespace SENG403
 
         // No-argument constructor. Populates the availableSounds array
         // with .wav files found in the Sounds folder.
+        //Sounds folder should be in the root directory of project (with .xaml and .cs files).
         public SoundModule()
         {
             loadSounds();
@@ -26,9 +27,9 @@ namespace SENG403
 
         // Makes the SoundPlayer start looping a sound.
         // Its one parameter is the filepath of the desiried .wav file as a string.
+        // *** Usage: can use getSound(index) for the parameter of this method.
         public void playSound(string soundPath)
         {
-            //Stream theSound = Resources.sawarp1;
             try
             {
                 player = new SoundPlayer(soundPath);
