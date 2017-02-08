@@ -24,6 +24,7 @@ namespace SENG403
 
         // Create a list of Alarms
         List<Alarm> alarmList;
+        Alarm currentAlarm;
 
         public MainWindow()
         {
@@ -31,6 +32,9 @@ namespace SENG403
 
             // Create a list of Alarms
             this.alarmList = new List<Alarm>();
+
+            // The Currently RINGING alarm, if applicable
+            this.currentAlarm = null;
 
             // Start the clock
             startclock();
@@ -82,7 +86,16 @@ namespace SENG403
                 // If the current time is one of the alarms, then throw an exception
                 if (DateTime.Now.ToString().Equals(alarm.getDateTime().ToString()))
                 {
-                    throw exception;    // This works
+                    // If the current time matches an alarm, set the current alarm
+                    // Also set "currently ringing" to be true
+                    currentAlarm = alarm;
+                    currentAlarm.setRinging(true);
+                }
+
+                // If there IS an alarm currently triggered and it is ringing, print alarm is ringing to screen
+                if (currentAlarm != null && currentAlarm.isRinging())
+                {
+                    timeLabel.Text = "ALARM IS RINGING";
                 }
             }
         }
@@ -114,17 +127,38 @@ namespace SENG403
             setAlarmTextBox.Clear();    // Clear the text box once clicked
         }
 
+        // If snooze is pressed, delay the currently ringing alarms time by a certain amount
+        private void snoozeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentAlarm != null && currentAlarm.isRinging())
+            {
+                currentAlarm.snooze(0.1);
+                currentAlarm.setRinging(false);
+                currentAlarm = null;
+            }
+        }
+
+        // Once the stop button is pressed, it stops the alarm ringing
+        // Need to decide what to do with the alarm once "stop" is pressed. Repeat tomorrow? Delete? Etc
+        private void stopButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentAlarm != null)
+            {
+                currentAlarm.setRinging(false);
+                currentAlarm = null;
+            }
+        }
     }
 
     // The alarm class which holds the required data
     public class Alarm
     {
-        String period; // AM or PM setting - may not be necessary
         String time;
         String date;
         DateTime settime;
         DateTime datetime;
         Boolean repeat;
+        bool currentlyRinging;
 
         public Alarm(DateTime datetime, Boolean repeat)
         {
@@ -132,10 +166,10 @@ namespace SENG403
             // We can then compare them using a datetime method
             this.datetime = datetime;
             this.settime = datetime;
-            this.period = null; // AM or PM setting
             this.time = datetime.ToLongTimeString();
             this.date = datetime.ToLongDateString();
             this.repeat = repeat;
+            bool currentlyRinging = false;
         }
 
         // Return the Date and Time this alarm is set to
@@ -154,5 +188,17 @@ namespace SENG403
         public void reset() { datetime = settime; }
 
         public Boolean getRepeatVal() { return repeat; }
+
+        // Return true if this alarm is currently ringing
+        public bool isRinging()
+        {
+            return currentlyRinging;
+        }
+
+        // Set the boolean value true/false depending on whether the alarm is ringing
+        public void setRinging(bool val)
+        {
+            this.currentlyRinging = val;
+        }
     }
 }

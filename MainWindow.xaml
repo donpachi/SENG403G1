@@ -16,5 +16,6 @@
         </ComboBox>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="35,166,0,0" TextWrapping="Wrap" Text="Set Alarm:" VerticalAlignment="Top" Height="22" Width="75"/>
         <Button x:Name="snoozeButton" Content="Snooze" HorizontalAlignment="Left" Margin="115,208,0,0" VerticalAlignment="Top" Width="75" Click="snoozeButton_Click"/>
+        <Button x:Name="stopButton" Content="Stop Alarm" HorizontalAlignment="Left" Margin="199,115,0,0" VerticalAlignment="Top" Width="75" Click="stopButton_Click"/>
     </Grid>
 </Window>
