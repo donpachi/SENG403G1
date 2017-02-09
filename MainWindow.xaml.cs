@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.IO;
 
 namespace SENG403
 {
@@ -23,6 +24,8 @@ namespace SENG403
     public partial class MainWindow : Window
     {
         Time time;
+        SoundModule sound = new SoundModule();
+
         public MainWindow()
         {
             InitializeComponent();
