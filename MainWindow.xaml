@@ -20,7 +20,8 @@
             </Canvas>
         </Canvas>
         <Canvas x:Name="canvasTimeDisplaySidebar" Height="1080" Canvas.Left="1420" Width="500" Background="#FF443939">
-            <Button x:Name="buttonSetAlarm" Content="Set Alarm" Canvas.Left="196.5" Canvas.Top="472" Width="107" Height="56" Click="gotoSetAlarm"/>
+            <Button x:Name="buttonSetAlarm" Content="Set Alarm" Canvas.Left="196.5" Canvas.Bottom="150" Width="107" Height="56" Click="gotoSetAlarm"/>
+            <Label x:Name="date_label" Content="Saturday, February 28, 2222" Canvas.Left="36" Canvas.Top="45" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35" />
         </Canvas>
 
         <Canvas x:Name="canvasAlarmSet" Visibility="Hidden">

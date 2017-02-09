@@ -29,16 +29,17 @@ namespace SENG403
         DispatcherTimer dTimer;
         private double secondDegrees, minuteDegrees, hourDegrees;
         private double currHour, currMin, currSec;
-        private string date;
+        private string date, timestring, meridiem;
         Image minImage, secImage, hrImage;
-        Label timeLabel;
+        Label timeLabel, dateLabel;
 
-        public Time(Image min, Image sec, Image hr, Label lb)
+        public Time(Image min, Image sec, Image hr, Label lb, Label dlb)
         {
             minImage = min;
             secImage = sec;
             hrImage = hr;
             timeLabel = lb;
+            dateLabel = dlb;
         }
 
         public void Start()
@@ -50,8 +51,19 @@ namespace SENG403
             updateTime();
             synchronizeHands();
             dTimer.Start();
+            dateLabel.Content = getDate();
         }
 
+        public String getDate()
+        {
+            String[] eDates = date.Split('/');
+            DateTime time = new DateTime(Convert.ToInt16(eDates[2]), Convert.ToInt16(eDates[0]), Convert.ToInt16(eDates[1]));
+            return time.ToString("D");
+        }
+
+#if DEBUG
+
+#endif
 
         private void updateTime()
         {
@@ -60,7 +72,9 @@ namespace SENG403
             var culture = new CultureInfo(cultureNames[0]);
             string currentTime = currentDateTime.ToString(culture);
             string[] dateTimeElements = currentTime.Split(' ');
-            date = dateTimeElements[1];
+            date = dateTimeElements[0];
+            timestring = dateTimeElements[1];
+            meridiem = dateTimeElements[2];
             string[] timeElements = dateTimeElements[1].Split(':');
             currHour = Convert.ToDouble(timeElements[0]);
             currMin = Convert.ToDouble(timeElements[1]);
@@ -146,6 +160,12 @@ namespace SENG403
                 hour = "  " + currHour.ToString();
             }
             else hour = currHour.ToString();
+
+            if (currHour == 12 && currMin == 0 && currSec >= 0)
+            {
+                dateLabel.Content = getDate();
+            }
+               
 
             timeLabel.Content = hour + " : " + min + " : " + sec;
         }

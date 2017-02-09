@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define DEMO
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -15,14 +16,15 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.IO;
-
 namespace SENG403
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+
         Time time;
         SoundModule sound = new SoundModule();
 
@@ -30,7 +32,7 @@ namespace SENG403
         {
             InitializeComponent();
             this.KeyUp += MainWindow_KeyUp;
-            time = new Time(minute_hand_image, second_hand_image, hour_hand_image, time_label);
+            time = new Time(minute_hand_image, second_hand_image, hour_hand_image, time_label, date_label);
             time.Start();
         }
 
@@ -43,6 +45,33 @@ namespace SENG403
                 digital_canvas.Visibility = Visibility.Visible;
                 analog_canvas.Visibility = Visibility.Visible;
             }
+
+#if DEMO    //allow custom time manipulation
+            if(e.Key == Key.Right)
+            {
+                //TODO increment tick rate
+            }
+
+            if(e.Key == Key.Left)
+            {
+                //TODO decrement tick rate
+            }
+
+            if(e.Key == Key.Up)
+            {
+                //TODO increment day
+            }
+
+            if (e.Key == Key.Down)
+            {
+                //TODO decrement day
+            }
+
+            if (e.Key == Key.Space)
+            {
+                //TODO resume normal speed
+            }
+#endif
         }
 
         private void clickButtonConfirm(object sender, RoutedEventArgs e)
