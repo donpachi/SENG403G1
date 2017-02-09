@@ -38,6 +38,11 @@ namespace SENG403
         {
             if (e.Key == Key.Escape)
                 Application.Current.Shutdown();
+            if (e.Key == Key.B)
+            {
+                digital_canvas.Visibility = Visibility.Visible;
+                analog_canvas.Visibility = Visibility.Visible;
+            }
         }
 
         private void clickButtonConfirm(object sender, RoutedEventArgs e)
@@ -49,8 +54,9 @@ namespace SENG403
         // (clicking this should go back to the time display screen)
         private void clickButtonCancel(object sender, RoutedEventArgs e)
         {
-            canvasAlarmSet.Visibility = System.Windows.Visibility.Hidden;
-            time_canvas.Visibility = System.Windows.Visibility.Visible;
+            canvasAlarmSet.Visibility = Visibility.Hidden;
+            time_canvas.Visibility = Visibility.Visible;
+            buttonSetAlarm.Visibility = Visibility.Visible;
         }
 
         // Listener for when an alarm sound from dropdown menu is selected (comboBox)
@@ -180,13 +186,15 @@ namespace SENG403
         {
             if (analog_canvas.IsVisible)
             {
-                analog_canvas.Visibility = System.Windows.Visibility.Hidden;
-                digital_canvas.Visibility = System.Windows.Visibility.Visible;
+                toggleDisplayButton.Content = "Analog";
+                analog_canvas.Visibility = Visibility.Hidden;
+                digital_canvas.Visibility = Visibility.Visible;
             }
             else
             {
-                analog_canvas.Visibility = System.Windows.Visibility.Visible;
-                digital_canvas.Visibility = System.Windows.Visibility.Hidden;
+                toggleDisplayButton.Content = "Digital";
+                analog_canvas.Visibility = Visibility.Visible;
+                digital_canvas.Visibility = Visibility.Hidden;
             }
         }
 
@@ -194,8 +202,8 @@ namespace SENG403
         // Hides the Time Display base canvas and makes the set alarm canvas visible
         private void gotoSetAlarm(object sender, RoutedEventArgs e)
         {
-            time_canvas.Visibility = System.Windows.Visibility.Hidden;
-            canvasAlarmSet.Visibility = System.Windows.Visibility.Visible;
+            buttonSetAlarm.Visibility = Visibility.Hidden;
+            canvasAlarmSet.Visibility = Visibility.Visible;
         }
         //=================================================================== end time display screen listeners
     }

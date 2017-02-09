@@ -8,7 +8,7 @@
         Title="Clock" Height="1080" Width="1920" WindowStyle="None" ResizeMode="NoResize" WindowState="Maximized">
     <Canvas Background="#FF141734">
         <Canvas x:Name="time_canvas">
-            <Canvas x:Name="digital_canvas" Canvas.Left="360" Canvas.Top="100">
+            <Canvas x:Name="digital_canvas" Canvas.Left="360" Canvas.Top="100" Visibility="Hidden">
                 <Label x:Name="time_label" Content="00 : 00 : 00" Width="800" Height="800" FontSize="130"
                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Microsoft JhengHei UI"/>
             </Canvas>
@@ -18,14 +18,13 @@
                 <Image x:Name="minute_hand_image" Height="800" Width="800" Source="pack://application:,,,/Resource/minute_hand.png"/>
                 <Image x:Name="second_hand_image" Height="800" Width="800" Source="pack://application:,,,/Resource/second_hand.png"/>
             </Canvas>
-            <Canvas x:Name="canvasTimeDisplaySidebar" Height="1020" Canvas.Left="1620" Width="300" Background="#FF443939" Canvas.Top="2">
-                <Button x:Name="buttonSetAlarm" Content="Set Alarm" Canvas.Left="96.5" Canvas.Top="45" Width="107" Height="55.96" Click="gotoSetAlarm"/>
-            </Canvas>
-            
+        </Canvas>
+        <Canvas x:Name="canvasTimeDisplaySidebar" Height="1080" Canvas.Left="1420" Width="500" Background="#FF443939">
+            <Button x:Name="buttonSetAlarm" Content="Set Alarm" Canvas.Left="196.5" Canvas.Top="472" Width="107" Height="56" Click="gotoSetAlarm"/>
         </Canvas>
 
-        <Canvas x:Name="canvasAlarmSet">
-            <Canvas x:Name="canvasDayOptions" Height="136" Canvas.Left="1398" Canvas.Top="581" Width="81">
+        <Canvas x:Name="canvasAlarmSet" Visibility="Hidden">
+            <Canvas x:Name="canvasDayOptions" Height="136" Canvas.Left="1561" Canvas.Top="634" Width="81">
                 <CheckBox x:Name="checkBox_Sunday" Content="Sunday" Foreground="White" Checked="checkedSunday"/>
                 <CheckBox x:Name="checkBox_Monday" Content="Monday" Foreground="White" Canvas.Top="20.098" Checked="checkedMonday"/>
                 <CheckBox x:Name="checkBox_Tuesday" Content="Tuesday" Foreground="White" Canvas.Top="40.196" Checked="checkedTuesday"/>
@@ -34,7 +33,7 @@
                 <CheckBox x:Name="checkBox_Friday" Content="Friday" Foreground="White" Canvas.Top="100.49" Checked="checkedFriday"/>
                 <CheckBox x:Name="checkBox_Saturday" Content="Saturday" Foreground="White" Canvas.Top="120.588" Checked="checkedSaturday"/>
             </Canvas>
-            <Canvas x:Name="canvasSnoozeOptions" Height="135" Canvas.Left="1508" Canvas.Top="582" Width="78">
+            <Canvas x:Name="canvasSnoozeOptions" Height="136" Canvas.Left="1664" Canvas.Top="634" Width="78">
                 <RadioButton x:Name="radioButton_1min" Content="1   Minute" Foreground="White" Checked="select1Min"/>
                 <RadioButton x:Name="radioButton_2mins" Content="2   Minutes" Foreground="White" Canvas.Top="19.96" Checked="select2Mins"/>
                 <RadioButton x:Name="radioButton_5mins" Content="5   Minutes" Foreground="White" Canvas.Top="39.92" Checked="select5Mins"/>
@@ -43,16 +42,20 @@
                 <RadioButton x:Name="radioButton_30mins" Content="30 Minutes" Foreground="White" Canvas.Top="99.8" Checked="select30Mins"/>
                 <RadioButton x:Name="radioButton_60mins" Content="60 Minutes" Foreground="White" Canvas.Top="119.76" Checked="select60Mins"/>
             </Canvas>
-            <TextBox x:Name="textBoxHourEntry" Height="99" Canvas.Left="1440" TextWrapping="Wrap" Canvas.Top="431" Width="99" FontSize="48" Foreground="White" TextAlignment="Center"/>
-            <TextBox x:Name="textBoxMinuteEntry" Height="99" Canvas.Left="1569" TextWrapping="Wrap" Canvas.Top="431" Width="99" FontSize="48" Foreground="White" TextAlignment="Center"/>
-            <Label x:Name="labelDays" Content="Days" Canvas.Left="1395" Canvas.Top="548" Foreground="White" FontSize="16"/>
-            <Label x:Name="labelSnooze" Content="Snooze" Canvas.Left="1505" Canvas.Top="548" Foreground="White" FontSize="16"/>
-            <Label x:Name="labelColon" Content=":" Canvas.Left="1543" Canvas.Top="437" Foreground="White" FontSize="48"/>
-            <Button x:Name="buttonConfirmAlarm" Content="Confirm" Canvas.Left="1629" Canvas.Top="679" Width="170" Height="38" Click="clickButtonConfirm"/>
-            <Button x:Name="button" Content="Cancel" Canvas.Left="1768" Canvas.Top="431" Width="45" Height="45"  Click="clickButtonCancel"/>
-            <ComboBox x:Name="comboBoxSounds" Canvas.Left="1629" Canvas.Top="582" Width="170" DataContextChanged="selectedSound"/>
-            <Label x:Name="labelSnooze_Copy" Content="Sound" Canvas.Left="1629" Canvas.Top="548" Foreground="White" FontSize="16"/>
-            <CheckBox x:Name="checkBoxRepeat" Content="Repeat Weekly" Canvas.Left="1628" Canvas.Top="631" Foreground="White" Checked="repeatWeeklyIsChecked"/>
+            <TextBox x:Name="textBoxHourEntry" Height="100" Canvas.Left="1561" TextWrapping="Wrap" Canvas.Top="408" Width="99" FontSize="48" MaxLength="2" TextAlignment="Center"
+                     VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            <TextBox x:Name="textBoxMinuteEntry" Height="100" Canvas.Left="1690" TextWrapping="Wrap" Canvas.Top="408" Width="99" FontSize="48" MaxLength="2" TextAlignment="Center"
+                     VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            <Label x:Name="labelDays" Content="Days" Canvas.Left="1561" Canvas.Top="604" Foreground="White" FontSize="16"/>
+            <Label x:Name="labelSnooze" Content="Snooze" Canvas.Left="1664" Canvas.Top="604" Foreground="White" FontSize="16"/>
+            <Label x:Name="labelColon" Content=":" Canvas.Left="1664" Canvas.Top="414" Foreground="White" FontSize="48"/>
+            <Button x:Name="buttonConfirmAlarm" Content="Confirm" Canvas.Left="1561" Canvas.Top="846" Width="170" Height="46" Click="clickButtonConfirm"/>
+            <Button x:Name="button" Content="Cancel" Canvas.Left="1744" Canvas.Top="846" Width="45" Height="46"  Click="clickButtonCancel"/>
+            <ComboBox x:Name="comboBoxSounds" Canvas.Left="1561" Canvas.Top="562" Width="228" DataContextChanged="selectedSound"/>
+            <Label x:Name="labelSnooze_Copy" Content="Sound" Canvas.Left="1561" Canvas.Top="531" Foreground="White" FontSize="16"/>
+            <CheckBox x:Name="checkBoxRepeat" Content="Repeat Weekly" Canvas.Left="1561" Canvas.Top="800" Foreground="White" Checked="repeatWeeklyIsChecked"/>
         </Canvas>
+
+        <ToggleButton x:Name="toggleDisplayButton" Content="Digital" Canvas.Left="1328" Canvas.Top="1038" Width ="80" Height="32" Click="displayModeToggle"/>
     </Canvas>
 </Window>
