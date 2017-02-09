@@ -82,12 +82,11 @@ namespace SENG403
                 // If the current time is one of the alarms, then throw an exception
                 if (DateTime.Now.ToString("T").Equals(alarm.getDateTime().ToString()))
                 {
-                    if (alarm.getDays() == "0000000" || alarm.getDays()[day].Equals("1"))
+                    if (alarm.getDays() == "0000000" || alarm.getDays()[day].Equals('1'))
                     {
                         currentAlarm = alarm;
                         currentAlarm.setRinging(true);
                     }
-
                 }
             }
         }
@@ -113,19 +112,33 @@ namespace SENG403
         {
             ///the following can be replaced with (might be faster as well):
             ///
-            ///DateTime date1 = new DateTime(year, month, day);
-            ///String date = date1.ToString("F");
-            ///String day = date.Split(',')[0];
-            ///
-            ///Ex. DateTime date1 = new DateTime(2008, 3, 1, 7, 0, 0);
-            ///Console.WriteLine(date1.ToString("F"));
-            ///Displays Saturday, March 01, 2008 7:00:00 AM
-            int[] t= { 0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 };
-            if (m < 3)
+            DateTime date1 = new DateTime(y, m, d);
+            String date = date1.ToString("F");
+            String day = date.Split(',')[0];
+            switch (day)
             {
-                y -= m;
+                case "Sunday":
+                    return 0;
+                case "Monday":
+                    return 1;
+                case "Tuesday":
+                    return 2;
+                case "Wednesday":
+                    return 3;
+                case "Thursday":
+                    return 4;
+                case "Friday":
+                    return 5;
+                case "Saturday":
+                    return 6;
             }
-            return (y + y / 4 - y / 100 + y / 400 + t[m - 1] + d) % 7;
+            throw new Exception("Day of the week..");
+            //int[] t= { 0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 };
+            //if (m < 3)
+            //{
+            //    y -= m;
+            //}
+            //return (y + y / 4 - y / 100 + y / 400 + t[m - 1] + d) % 7;
         }
 
 

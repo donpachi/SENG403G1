@@ -47,8 +47,6 @@ namespace SENG403
                 comboBoxSounds.Items.Add(availableSounds[i]);
             }
 
-            //LEFT OFF HERE
-            aRingingAlarm = new AlarmHandler().getCurrentAlarm();
             Alarm.onRing += onAlarmRing;
             //aRingingAlarm.alarmIsRinging += ringingAlarm;             //currently causes nullpointerexception,
                                                                         // see setRinging() method in Alarm class
