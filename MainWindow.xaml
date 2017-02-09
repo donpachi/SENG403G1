@@ -8,7 +8,7 @@
         Title="MainWindow" Height="350" Width="525"
         WindowStartupLocation="CenterScreen" WindowStyle="None" WindowState="Maximized" ResizeMode="NoResize">
     <Canvas Visibility="Visible">
-        <Canvas x:Name="canvasAlarmSet" Visibility="Visible">
+        <Canvas x:Name="canvasAlarmSet" Visibility="Hidden">
             <Canvas x:Name="canvasDayOptions" Height="135.686" Canvas.Left="96.333" Canvas.Top="161.487" Width="81.198">
                 <CheckBox x:Name="checkBox_Sunday" Content="Sunday" Checked="checkedSunday"/>
                 <CheckBox x:Name="checkBox_Monday" Content="Monday" Canvas.Top="20.098" Checked="checkedMonday"/>
@@ -36,6 +36,7 @@
             <Button x:Name="button" Content="Cancel" Canvas.Left="466" Canvas.Top="10.666" Width="45" Height="45" Click="clickButtonCancel"/>
             <ComboBox x:Name="comboBoxSounds" Canvas.Left="326.741" Canvas.Top="162.453" Width="170.259" DataContextChanged="selectedSound"/>
             <Label x:Name="labelSnooze_Copy" Content="Sound" Canvas.Left="327.337" Canvas.Top="127.666" FontSize="16"/>
+            <CheckBox x:Name="checkBoxRepeat" Content="Repeat Weekly" Canvas.Left="326" Canvas.Top="211" Checked="repeatWeeklyIsChecked"/>
         </Canvas>
 
         <Canvas x:Name="canvasAlarmActive" Visibility="Hidden">
@@ -44,7 +45,7 @@
             <Button x:Name="buttonSnoozeAlarm" Content="Snooze" Canvas.Left="128" Canvas.Top="237.605" Width="250" Height="49.75" Click="clickSnooze"/>
         </Canvas>
 
-        <Canvas x:Name="canvasTimeDisplayBase" Visibility="Hidden">
+        <Canvas x:Name="canvasTimeDisplayBase" Visibility="Visible">
             <Canvas x:Name="canvasTimeDisplaySidebar" Height="349" Canvas.Left="361" Width="163" Background="#FF443939">
                 <Button x:Name="buttonSetAlarm" Content="Set Alarm" Canvas.Left="30" Canvas.Top="45" Width="107" Height="55.96" Click="gotoSetAlarm"/>
             </Canvas>
@@ -58,7 +59,7 @@
                 <Ellipse x:Name="tempAnalogClock" Fill="#FFF4F4F5" Height="100" Canvas.Left="126" Stroke="Black" Canvas.Top="91" Width="100"/>
             </Canvas>
         </Canvas>
-        <CheckBox x:Name="checkBoxRepeat" Content="Repeat Weekly" Canvas.Left="326" Canvas.Top="211" Checked="repeatWeeklyIsChecked"/>
+        
 
     </Canvas>
 </Window>
