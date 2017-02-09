@@ -26,7 +26,11 @@ namespace SENG403
     {
 
         Time time;
-        SoundModule sound = new SoundModule();
+        SoundModule sound = new SoundModule();         //base sound module to be copied into each alarm
+                                                        // (each alarm gets their own instance which can be set accordingly)
+        AlarmHandler alarmHandler = new AlarmHandler();
+        Alarm aRingingAlarm;
+
 
         public MainWindow()
         {
@@ -34,7 +38,27 @@ namespace SENG403
             this.KeyUp += MainWindow_KeyUp;
             time = new Time(minute_hand_image, second_hand_image, hour_hand_image, time_label, date_label);
             time.Start();
+
+            // populate sounds comboBox with available .wav files in Sound directory
+            string[] availableSounds = sound.getSounds();
+            for(int i = 0; i<availableSounds.Length; i++)
+            {
+                comboBoxSounds.Items.Add(availableSounds[i]);
+            }
+
+            //LEFT OFF HERE
+            aRingingAlarm = new AlarmHandler().getCurrentAlarm();
+            //aRingingAlarm.alarmIsRinging += ringingAlarm;             //currently causes nullpointerexception,
+                                                                        // see setRinging() method in Alarm class
+
         }
+
+        // custom event for handling a ringing alarm from an alarm object
+        public void ringingAlarm(object sender, EventArgs e)
+        {
+            buttonDismissAlarm.Visibility = Visibility.Visible;
+        }
+
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
@@ -74,9 +98,54 @@ namespace SENG403
 #endif
         }
 
+        // Get all set values on the interface and send them to the alarm class to make an alarm
         private void clickButtonConfirm(object sender, RoutedEventArgs e)
         {
+            // convert the hour and minute entries to integers so that they may be used for
+            // the alarm's DateTime
+            int theHour = Convert.ToInt32(textBoxHourEntry.Text);
+            int theMinute = Convert.ToInt32(textBoxMinuteEntry.Text);
 
+            // string which holds 0 or 1 for each day of the week (Sunday = 0th, Monday = 1th, ..., Saturday = 6th)
+            string alarmDaysChecked = "";
+
+            // Build days string before creating alarm
+            if (checkBox_Sunday.IsChecked == true) { alarmDaysChecked += "1"; }
+            else { alarmDaysChecked += "0"; }
+
+            if (checkBox_Monday.IsChecked == true) { alarmDaysChecked += "1"; }
+            else { alarmDaysChecked += "0"; }
+
+            if (checkBox_Tuesday.IsChecked == true) { alarmDaysChecked += "1"; }
+            else { alarmDaysChecked += "0"; }
+
+            if (checkBox_Wednesday.IsChecked == true) { alarmDaysChecked += "1"; }
+            else { alarmDaysChecked += "0"; }
+
+            if (checkBox_Thursday.IsChecked == true) { alarmDaysChecked += "1"; }
+            else { alarmDaysChecked += "0"; }
+
+            if (checkBox_Friday.IsChecked == true) { alarmDaysChecked += "1"; }
+            else { alarmDaysChecked += "0"; }
+
+            if (checkBox_Saturday.IsChecked == true) { alarmDaysChecked += "1"; }
+            else { alarmDaysChecked += "0"; }
+
+            //TEMPRORARY/ROUGH to make functionality work:
+            DateTime theTime = new System.DateTime(System.DateTime.Now.Year, System.DateTime.Now.Month,
+                System.DateTime.Now.Day, theHour, theMinute, 0);
+
+            // set the sound for the alarm being created (selected from comboBox)
+            string selectedSound = comboBoxSounds.Text;
+            sound.setSound(selectedSound);
+
+            //TODO: need to pass in snooze time
+
+            // create new alarm object
+            alarmHandler.setNewAlarm(theTime, alarmDaysChecked, sound);
+
+            // DEBUG - print out days checked to console
+           // System.Diagnostics.Debug.WriteLine("DAYS: "+alarmDaysChecked);
         }
 
         private void clickButtonCancel(object sender, RoutedEventArgs e)
@@ -103,7 +172,7 @@ namespace SENG403
         // Checked the Sunday checkbox for an alarm
         private void checkedSunday(object sender, RoutedEventArgs e)
         {
-
+           
         }
 
         // Checked the Monday checkbox for an alarm
@@ -194,13 +263,21 @@ namespace SENG403
         // Listener for when the snooze button is pressed
         private void clickSnooze(object sender, RoutedEventArgs e)
         {
-
+            /*
+            if (alarmHandler. != null && currentAlarm.isRinging())
+            {
+                currentAlarm.snooze(0.1);
+                currentAlarm.setRinging(false);
+                currentAlarm = null;
+            }*/
         }
 
         // Listener for the Dismiss button
         private void clickDismiss(object sender, RoutedEventArgs e)
         {
-
+            Alarm ringingAlarm = alarmHandler.getCurrentAlarm();
+            ringingAlarm.setRinging(false);
+            buttonDismissAlarm.Visibility = Visibility.Hidden;
         }
         //=================================================================== end active alarm screen listeners
 

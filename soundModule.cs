@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace SENG403
 {
-    class SoundModule
+    public class SoundModule
     {
         SoundPlayer player;
         private Boolean playing = false;    //true when sound is looping, false when not.
         string[] availableSounds;           //array to hold the filepath of .wav files in the Sounds folder
-
+        string currentSound;                //the sound that is currently set to play on this SoundModule
 
         // No-argument constructor. Populates the availableSounds array
         // with .wav files found in the Sounds folder.
@@ -22,17 +22,24 @@ namespace SENG403
         public SoundModule()
         {
             loadSounds();
+            currentSound = "Sounds\\squarearp1.wav";
         }
 
+        //set the sound that is to be played by this SoundModule
+        public void setSound(string soundPath)
+        {
+            currentSound = soundPath;
+        }
 
         // Makes the SoundPlayer start looping a sound.
         // Its one parameter is the filepath of the desiried .wav file as a string.
-        // *** Usage: can use getSound(index) for the parameter of this method.
-        public void playSound(string soundPath)
+        // *** Usage: use setSound(the sound's filepath) before calling playSound()
+        // otherwise can use getSound(index) for the parameter of this method.
+        public void playSound()
         {
             try
             {
-                player = new SoundPlayer(soundPath);
+                player = new SoundPlayer(currentSound);
                 player.PlayLooping();                       //loops the selected sound until stopSound() is called
                 playing = true;
             }
@@ -84,7 +91,7 @@ namespace SENG403
         // populate availableSounds array with the .wav filepaths found in the Sounds folder
         public void loadSounds()
         {
-            availableSounds = Directory.GetFiles("sounds", "*.wav");      //access two directories up to the sounds folder
+            availableSounds = Directory.GetFiles("Sounds", "*.wav");      //access two directories up to the sounds folder
 
             // stretch goal: create a popup that informs the user that the sounds folder has no .wav files in it.
 
