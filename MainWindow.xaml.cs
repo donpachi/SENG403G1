@@ -29,7 +29,7 @@ namespace SENG403
         SoundModule sound = new SoundModule();         //base sound module to be copied into each alarm
                                                         // (each alarm gets their own instance which can be set accordingly)
         AlarmHandler alarmHandler = new AlarmHandler();
-        Alarm aRingingAlarm;
+        Double snoozeTime = 0;
 
 
         public MainWindow()
@@ -57,6 +57,7 @@ namespace SENG403
         {
             Console.WriteLine("ring");
             buttonDismissAlarm.Visibility = Visibility.Visible;
+            buttonSnoozeAlarm.Visibility = Visibility.Visible;
         }
 
         //// custom event for handling a ringing alarm from an alarm object
@@ -164,104 +165,47 @@ namespace SENG403
             buttonSetAlarm.Visibility = Visibility.Visible;
         }
 
-        // Listener for when an alarm sound from dropdown menu is selected (comboBox)
-        // I am not 100% sure on this type of event listener though
-        private void selectedSound(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-
-        //-------------------------------------------------------------checkboxes
-        // Checked the repeat weekly checkbox
-        private void repeatWeeklyIsChecked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        // Checked the Sunday checkbox for an alarm
-        private void checkedSunday(object sender, RoutedEventArgs e)
-        {
-           
-        }
-
-        // Checked the Monday checkbox for an alarm
-        private void checkedMonday(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        // Checked the Tuesday checkbox for an alarm
-        private void checkedTuesday(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        // Checked the Wednesday checkbox for an alarm
-        private void checkedWednesday(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        // Checked the Thursday checkbox for an alarm
-        private void checkedThursday(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        // Checked the Friday checkbox for an alarm
-        private void checkedFriday(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        // Checked the Saturday checkbox for an alarm
-        private void checkedSaturday(object sender, RoutedEventArgs e)
-        {
-
-        }
-        //-------------------------------------------------------------endcheckboxes
-
         //-------------------------------------------------------------radiobuttons
         // Selected the 1 minute snooze radio button for an alarm
         private void select1Min(object sender, RoutedEventArgs e)
         {
-
+            snoozeTime = 1;
         }
 
         // Selected the 2 minute snooze radio button for an alarm
         private void select2Mins(object sender, RoutedEventArgs e)
         {
-
+            snoozeTime = 2;
         }
 
         // Selected the 5 minute snooze radio button for an alarm
         private void select5Mins(object sender, RoutedEventArgs e)
         {
-
+            snoozeTime = 5;
         }
 
         // Selected the 10 minute snooze radio button for an alarm
         private void select10Mins(object sender, RoutedEventArgs e)
         {
-
+            snoozeTime = 10;
         }
 
         // Selected the 15 minute snooze radio button for an alarm
         private void select15Mins(object sender, RoutedEventArgs e)
         {
-
+            snoozeTime = 15;
         }
 
         // Selected the 30 minute snooze radio button for an alarm
         private void select30Mins(object sender, RoutedEventArgs e)
         {
-
+            snoozeTime = 30;
         }
 
         // Selected the 60 minute snooze radio button for an alarm
         private void select60Mins(object sender, RoutedEventArgs e)
         {
-
+            snoozeTime = 60;
         }
         //-------------------------------------------------------------end radiobuttons
         //=================================================================== end alarm set screen
@@ -272,13 +216,9 @@ namespace SENG403
         // Listener for when the snooze button is pressed
         private void clickSnooze(object sender, RoutedEventArgs e)
         {
-            /*
-            if (alarmHandler. != null && currentAlarm.isRinging())
-            {
-                currentAlarm.snooze(0.1);
-                currentAlarm.setRinging(false);
-                currentAlarm = null;
-            }*/
+            alarmHandler.getCurrentAlarm().snooze(snoozeTime);
+            buttonDismissAlarm.Visibility = Visibility.Hidden;
+            buttonSnoozeAlarm.Visibility = Visibility.Hidden;
         }
 
         // Listener for the Dismiss button
@@ -287,6 +227,8 @@ namespace SENG403
             Alarm ringingAlarm = alarmHandler.getCurrentAlarm();
             ringingAlarm.setRinging(false);
             buttonDismissAlarm.Visibility = Visibility.Hidden;
+            buttonSnoozeAlarm.Visibility = Visibility.Hidden;
+            alarmHandler.endAlarm(ringingAlarm);
         }
         //=================================================================== end active alarm screen listeners
 

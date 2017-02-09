@@ -24,16 +24,17 @@
             <Label x:Name="date_label" Content="Saturday, February 28, 2222" Canvas.Left="36" Canvas.Top="45" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35" />
         </Canvas>
         <Button x:Name="buttonDismissAlarm" Content="Dismiss" Canvas.Left="560" Canvas.Bottom="150" Width="300" Height="100" Click="clickDismiss" Canvas.Top="462" FontSize="24" Visibility="Hidden"/>
-
+        <Button x:Name="buttonSnoozeAlarm" Content="Snooze" Canvas.Left="560" Canvas.Bottom="150" Width="300" Height="100" Click="clickSnooze" Canvas.Top="602" FontSize="24" Visibility="Hidden"/>
+        
         <Canvas x:Name="canvasAlarmSet" Visibility="Hidden">
             <Canvas x:Name="canvasDayOptions" Height="136" Canvas.Left="1561" Canvas.Top="634" Width="81">
-                <CheckBox x:Name="checkBox_Sunday" Content="Sunday" Foreground="White" Checked="checkedSunday"/>
-                <CheckBox x:Name="checkBox_Monday" Content="Monday" Foreground="White" Canvas.Top="20.098" Checked="checkedMonday"/>
-                <CheckBox x:Name="checkBox_Tuesday" Content="Tuesday" Foreground="White" Canvas.Top="40.196" Checked="checkedTuesday"/>
-                <CheckBox x:Name="checkBox_Wednesday" Content="Wednesday" Foreground="White" Canvas.Top="60.294" Checked="checkedWednesday"/>
-                <CheckBox x:Name="checkBox_Thursday" Content="Thursday" Foreground="White" Canvas.Top="80.392" Checked="checkedThursday"/>
-                <CheckBox x:Name="checkBox_Friday" Content="Friday" Foreground="White" Canvas.Top="100.49" Checked="checkedFriday"/>
-                <CheckBox x:Name="checkBox_Saturday" Content="Saturday" Foreground="White" Canvas.Top="120.588" Checked="checkedSaturday"/>
+                <CheckBox x:Name="checkBox_Sunday" Content="Sunday" Foreground="White"/>
+                <CheckBox x:Name="checkBox_Monday" Content="Monday" Foreground="White" Canvas.Top="20.098"/>
+                <CheckBox x:Name="checkBox_Tuesday" Content="Tuesday" Foreground="White" Canvas.Top="40.196"/>
+                <CheckBox x:Name="checkBox_Wednesday" Content="Wednesday" Foreground="White" Canvas.Top="60.294"/>
+                <CheckBox x:Name="checkBox_Thursday" Content="Thursday" Foreground="White" Canvas.Top="80.392"/>
+                <CheckBox x:Name="checkBox_Friday" Content="Friday" Foreground="White" Canvas.Top="100.49"/>
+                <CheckBox x:Name="checkBox_Saturday" Content="Saturday" Foreground="White" Canvas.Top="120.588"/>
             </Canvas>
             <Canvas x:Name="canvasSnoozeOptions" Height="136" Canvas.Left="1664" Canvas.Top="634" Width="78">
                 <RadioButton x:Name="radioButton_1min" Content="1   Minute" Foreground="White" Checked="select1Min"/>
@@ -53,11 +54,11 @@
             <Label x:Name="labelColon" Content=":" Canvas.Left="1664" Canvas.Top="414" Foreground="White" FontSize="48"/>
             <Button x:Name="buttonConfirmAlarm" Content="Confirm" Canvas.Left="1561" Canvas.Top="846" Width="170" Height="46" Click="clickButtonConfirm"/>
             <Button x:Name="button" Content="Cancel" Canvas.Left="1744" Canvas.Top="846" Width="45" Height="46"  Click="clickButtonCancel"/>
-            <ComboBox x:Name="comboBoxSounds" Canvas.Left="1561" Canvas.Top="562" Width="228" DataContextChanged="selectedSound"/>
+            <ComboBox x:Name="comboBoxSounds" Canvas.Left="1561" Canvas.Top="562" Width="228"/>
             <Label x:Name="labelSnooze_Copy" Content="Sound" Canvas.Left="1561" Canvas.Top="531" Foreground="White" FontSize="16"/>
-            <CheckBox x:Name="checkBoxRepeat" Content="Repeat Weekly" Canvas.Left="1561" Canvas.Top="800" Foreground="White" Checked="repeatWeeklyIsChecked"/>
         </Canvas>
 
         <ToggleButton x:Name="toggleDisplayButton" Content="Digital" Canvas.Left="1328" Canvas.Top="1038" Width ="80" Height="32" Click="displayModeToggle"/>
+        
     </Canvas>
 </Window>
