@@ -15,3 +15,5 @@ D:\School\SENG403\SENG403G1\obj\Debug\SENG403.exe
 D:\School\SENG403\SENG403G1\obj\Debug\SENG403.pdb
 D:\School\SENG403\SENG403G1\bin\Debug\Sounds\squarearp1.wav
 D:\School\SENG403\SENG403G1\bin\Debug\Sounds\sawarp1.wav
+D:\School\SENG403\SENG403G1\obj\Debug\Simple Styles.baml
+D:\School\SENG403\SENG403G1\obj\Debug\App.baml
