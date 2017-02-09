@@ -39,6 +39,7 @@ namespace SENG403
             time = new Time(minute_hand_image, second_hand_image, hour_hand_image, time_label, date_label);
             time.Start();
 
+
             // populate sounds comboBox with available .wav files in Sound directory
             string[] availableSounds = sound.getSounds();
             for(int i = 0; i<availableSounds.Length; i++)
@@ -48,16 +49,23 @@ namespace SENG403
 
             //LEFT OFF HERE
             aRingingAlarm = new AlarmHandler().getCurrentAlarm();
+            Alarm.onRing += onAlarmRing;
             //aRingingAlarm.alarmIsRinging += ringingAlarm;             //currently causes nullpointerexception,
                                                                         // see setRinging() method in Alarm class
 
         }
 
-        // custom event for handling a ringing alarm from an alarm object
-        public void ringingAlarm(object sender, EventArgs e)
+        public void onAlarmRing()
         {
+            Console.WriteLine("ring");
             buttonDismissAlarm.Visibility = Visibility.Visible;
         }
+
+        //// custom event for handling a ringing alarm from an alarm object
+        //public void ringingAlarm(object sender, EventArgs e)
+        //{
+        //    buttonDismissAlarm.Visibility = Visibility.Visible;
+        //}
 
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
@@ -144,8 +152,11 @@ namespace SENG403
             // create new alarm object
             alarmHandler.setNewAlarm(theTime, alarmDaysChecked, sound);
 
+            canvasAlarmSet.Visibility = Visibility.Hidden;
+            buttonSetAlarm.Visibility = Visibility.Visible;
+
             // DEBUG - print out days checked to console
-           // System.Diagnostics.Debug.WriteLine("DAYS: "+alarmDaysChecked);
+            // System.Diagnostics.Debug.WriteLine("DAYS: "+alarmDaysChecked);
         }
 
         private void clickButtonCancel(object sender, RoutedEventArgs e)

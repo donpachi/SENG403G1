@@ -161,6 +161,9 @@ namespace SENG403
             }
             else hour = currHour.ToString();
 
+            if (meridiem == "PM")
+                hour = (currHour + 12).ToString();
+
             if (currHour == 12 && currMin == 0 && currSec >= 0)
             {
                 dateLabel.Content = getDate();

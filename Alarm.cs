@@ -15,6 +15,8 @@ namespace SENG403
         List<Alarm> alarmList;
         Alarm currentAlarm;
 
+
+
         public AlarmHandler()
         {
 
@@ -78,7 +80,7 @@ namespace SENG403
             {
                 
                 // If the current time is one of the alarms, then throw an exception
-                if (DateTime.Now.ToString().Equals(alarm.getDateTime().ToString()))
+                if (DateTime.Now.ToString("T").Equals(alarm.getDateTime().ToString()))
                 {
                     if (alarm.getDays() == "0000000" || alarm.getDays()[day].Equals("1"))
                     {
@@ -142,6 +144,14 @@ namespace SENG403
         bool currentlyRinging;
         SoundModule alarmSound;
 
+        public delegate void alarmEvent();
+        public static event alarmEvent onRing;
+
+        public void AlarmRinging()
+        {
+            if (onRing != null)
+                onRing();
+        }
 
         public Alarm(DateTime time, string days, SoundModule alarmSound)
         {
@@ -153,8 +163,6 @@ namespace SENG403
             if (days != "0000000") { repeat = true; }
         }
 
-        //custom even handler to use with MainWindow
-        public event EventHandler alarmIsRinging;
 
         // Return the Date and Time this alarm is set to
         public String getDateTime()
@@ -181,16 +189,15 @@ namespace SENG403
         public void setRinging(bool val)
         {
             this.currentlyRinging = val;
-            if(val == true)
+            if (val == true)
             {
                 alarmSound.playSound();         //play alarm sound
-                if (alarmIsRinging != null)
-                {
-                    alarmIsRinging(this, null);     //activate alarm ringing event
-                }
+                AlarmRinging();
             }
             else { alarmSound.stopSound(); }
         }
+
+
 
 
         // Getter method to see if the current alarm is ringing
