@@ -50,8 +50,6 @@ namespace SENG403
 
         }
 
-        // Click the cancel button on the set alarm screen
-        // (clicking this should go back to the time display screen)
         private void clickButtonCancel(object sender, RoutedEventArgs e)
         {
             canvasAlarmSet.Visibility = Visibility.Hidden;

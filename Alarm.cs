@@ -98,6 +98,15 @@ namespace SENG403
         //taken from stackoverflow, needs to be converted to C++
         private int dayofweek(int d, int m, int y)
         {
+            ///the following can be replaced with (might be faster as well):
+            ///
+            ///DateTime date1 = new DateTime(year, month, day);
+            ///String date = date1.ToString("F");
+            ///String day = date.Split(',')[0];
+            ///
+            ///Ex. DateTime date1 = new DateTime(2008, 3, 1, 7, 0, 0);
+            ///Console.WriteLine(date1.ToString("F"));
+            ///Displays Saturday, March 01, 2008 7:00:00 AM
             int[] t= { 0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 };
             if (m < 3)
             {
