@@ -3,7 +3,8 @@
   <Profiles />
   <Settings>
     <Setting Name="alarmArray" Type="System.Collections.Generic.List&lt;string&gt;" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">
+</Value>
     </Setting>
   </Settings>
 </SettingsFile>

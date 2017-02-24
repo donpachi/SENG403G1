@@ -30,6 +30,12 @@ namespace SENG403
             this.currentAlarm = null;
             //Properties.Settings.Default.Reset();
 
+            if (Properties.Settings.Default.alarmArray == null)
+            {
+                Properties.Settings.Default.alarmArray = new List<string>();
+                Properties.Settings.Default.Save();
+            }
+
             // Create a list of Alarms and populate it with any previously set alarms
             this.alarmList = populateAlarmList(); 
 
