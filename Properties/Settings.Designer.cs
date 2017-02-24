@@ -8,22 +8,74 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SENG403.Properties
-{
-
-
+namespace SENG403.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Generic.List<SENG403.Alarm> Alarms {
+            get {
+                return ((global::System.Collections.Generic.List<SENG403.Alarm>)(this["Alarms"]));
+            }
+            set {
+                this["Alarms"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Generic.List<string> alarmArray {
+            get {
+                return ((global::System.Collections.Generic.List<string>)(this["alarmArray"]));
+            }
+            set {
+                this["alarmArray"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::SENG403.Alarm alarm {
+            get {
+                return ((global::SENG403.Alarm)(this["alarm"]));
+            }
+            set {
+                this["alarm"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::SENG403.AlarmSettings Alarms2 {
+            get {
+                return ((global::SENG403.AlarmSettings)(this["Alarms2"]));
+            }
+            set {
+                this["Alarms2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string stringtest {
+            get {
+                return ((string)(this["stringtest"]));
+            }
+            set {
+                this["stringtest"] = value;
             }
         }
     }

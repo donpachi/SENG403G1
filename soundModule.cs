@@ -14,7 +14,7 @@ namespace SENG403
         SoundPlayer player;
         private Boolean playing = false;    //true when sound is looping, false when not.
         string[] availableSounds;           //array to hold the filepath of .wav files in the Sounds folder
-        string currentSound;                //the sound that is currently set to play on this SoundModule
+        public string currentSound;                //the sound that is currently set to play on this SoundModule
 
         // No-argument constructor. Populates the availableSounds array
         // with .wav files found in the Sounds folder.
