@@ -25,57 +25,12 @@ namespace SENG403.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Generic.List<SENG403.Alarm> Alarms {
-            get {
-                return ((global::System.Collections.Generic.List<SENG403.Alarm>)(this["Alarms"]));
-            }
-            set {
-                this["Alarms"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public global::System.Collections.Generic.List<string> alarmArray {
             get {
                 return ((global::System.Collections.Generic.List<string>)(this["alarmArray"]));
             }
             set {
                 this["alarmArray"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::SENG403.Alarm alarm {
-            get {
-                return ((global::SENG403.Alarm)(this["alarm"]));
-            }
-            set {
-                this["alarm"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::SENG403.AlarmSettings Alarms2 {
-            get {
-                return ((global::SENG403.AlarmSettings)(this["Alarms2"]));
-            }
-            set {
-                this["Alarms2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string stringtest {
-            get {
-                return ((string)(this["stringtest"]));
-            }
-            set {
-                this["stringtest"] = value;
             }
         }
     }

@@ -2,22 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SENG403.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Alarms" Type="System.Collections.Generic.List&lt;SENG403.Alarm&gt;" Scope="User">
-      <Value Profile="(Default)">
-</Value>
-    </Setting>
     <Setting Name="alarmArray" Type="System.Collections.Generic.List&lt;string&gt;" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="alarm" Type="SENG403.Alarm" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="Alarms2" Type="SENG403.AlarmSettings" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="stringtest" Type="System.String" Scope="User">
-      <Value Profile="(Default)">
-</Value>
     </Setting>
   </Settings>
 </SettingsFile>
