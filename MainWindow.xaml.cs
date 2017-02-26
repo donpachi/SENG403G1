@@ -58,9 +58,6 @@ namespace SENG403
         // Once the window has been closed, update the settings
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            //Properties.Settings.Default["Alarms"] = alarmHandler.alarmList;
-            //Properties.Settings.Default.Alarms2.alarms = alarmHandler.alarmList;
-            //Properties.Settings.Default.Save();
             alarmHandler.populateSettings();
             Properties.Settings.Default.Save();
         }
