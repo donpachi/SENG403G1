@@ -37,6 +37,9 @@ namespace SENG403
         public MainWindow()
         {
             InitializeComponent();
+
+
+
             this.KeyUp += MainWindow_KeyUp;
             time = new Time(minute_hand_image, second_hand_image, hour_hand_image, time_label, date_label);
             time.Start();
@@ -64,7 +67,6 @@ namespace SENG403
 
         public void onAlarmRing()
         {
-            Console.WriteLine("ring");
             buttonDismissAlarm.Visibility = Visibility.Visible;
             buttonSnoozeAlarm.Visibility = Visibility.Visible;
         }
@@ -79,7 +81,10 @@ namespace SENG403
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                Application.Current.Shutdown();
+            {
+                time.DisableAnimations();
+                this.WindowState = System.Windows.WindowState.Minimized;
+            }
             if (e.Key == Key.B)
             {
                 digital_canvas.Visibility = Visibility.Visible;
@@ -242,7 +247,7 @@ namespace SENG403
         //=================================================================== end active alarm screen listeners
 
 
-
+        #region Display functions
         //=================================================================== time display screen listeners
         // Listener for when the toggleButton is checked
         // when clicked, if state is analog, switch to digital. Else switch to analog.
@@ -270,5 +275,6 @@ namespace SENG403
             canvasAlarmSet.Visibility = Visibility.Visible;
         }
         //=================================================================== end time display screen listeners
+        #endregion
     }
 }

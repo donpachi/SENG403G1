@@ -11,7 +11,7 @@ using System.Windows.Threading;
 
 namespace SENG403
 {
-    public enum RenderMode { RenderMinutes, RenderHour, RenderAll }
+    public enum RenderMode { RenderSecond, RenderMinutes, RenderHour, RenderAll, DontRender }
 
     public class CONSTANTS
     {
@@ -32,6 +32,7 @@ namespace SENG403
         private string date, timestring, meridiem;
         Image minImage, secImage, hrImage;
         Label timeLabel, dateLabel;
+        Boolean animateClock;
 
         public Time(Image min, Image sec, Image hr, Label lb, Label dlb)
         {
@@ -48,22 +49,30 @@ namespace SENG403
             dTimer = new DispatcherTimer();
             dTimer.Tick += new EventHandler(dTimer_Tick);
             dTimer.Interval = new TimeSpan(0, 0, 0, 0, CONSTANTS.TICK_INTERVAL_MS);
+            animateClock = true;
             updateTime();
             synchronizeHands();
             dTimer.Start();
-            dateLabel.Content = getDate();
+            dateLabel.Content = GetDate();
         }
 
-        public String getDate()
+        public String GetDate()
         {
             String[] eDates = date.Split('/');
             DateTime time = new DateTime(Convert.ToInt16(eDates[2]), Convert.ToInt16(eDates[0]), Convert.ToInt16(eDates[1]));
             return time.ToString("D");
         }
 
-#if DEBUG
+        public void DisableAnimations()
+        {
+            animateClock = false;
+        }
 
-#endif
+        public void EnableAnimations()
+        {
+            animateClock = true;
+        }
+
 
         private void updateTime()
         {
@@ -96,6 +105,14 @@ namespace SENG403
 
         private void renderAngles(RenderMode renderMode)
         {
+
+            if (renderMode == RenderMode.RenderSecond)
+            {
+                RotateTransform transform = new RotateTransform(secondDegrees, secImage.Width / 2, secImage.Height / 2);
+                secondDegrees = (secondDegrees + degreeInterval) >= 360 ? 0 : secondDegrees + degreeInterval;
+                secImage.RenderTransform = transform;
+            }
+
             if (renderMode == RenderMode.RenderMinutes)
             {
                 RotateTransform transform = new RotateTransform(minuteDegrees, minImage.Width / 2, minImage.Height / 2);
@@ -122,20 +139,20 @@ namespace SENG403
 
         private void dTimer_Tick(object sender, EventArgs e)
         {
-            RotateTransform transform = new RotateTransform(secondDegrees, secImage.Width / 2, secImage.Height / 2);
-            secondDegrees = (secondDegrees + degreeInterval) >= 360 ? 0 : secondDegrees + degreeInterval;
-            secImage.RenderTransform = transform;
-
-            if (secondDegrees % CONSTANTS.DEG_PER_SEC == 0)
+            if (animateClock)
             {
-                updateTime();
-                computeAngles();
-                renderAngles(RenderMode.RenderMinutes);
-                updateTimeLabel();
-            }
-            if (minuteDegrees % CONSTANTS.DEG_PER_HOUR == 0)
-            {
-                renderAngles(RenderMode.RenderHour);
+                renderAngles(RenderMode.RenderSecond);
+                if (secondDegrees % CONSTANTS.DEG_PER_SEC == 0)
+                {
+                    updateTime();
+                    computeAngles();
+                    renderAngles(RenderMode.RenderMinutes);
+                    updateTimeLabel();
+                }
+                if (minuteDegrees % CONSTANTS.DEG_PER_HOUR == 0)
+                {
+                    renderAngles(RenderMode.RenderHour);
+                }
             }
         }
 
