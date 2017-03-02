@@ -67,6 +67,8 @@
         </Canvas>
 
         <ToggleButton x:Name="toggleDisplayButton" Content="Digital" Canvas.Left="1328" Canvas.Top="1038" Width ="80" Height="32" Click="displayModeToggle"/>
+        <Button x:Name="closeButton" Content="X" Canvas.Left="1383" Canvas.Top="10" Width="24" Click="closeApplicationClick"/>
+        <Button x:Name="minimizeButton" Content="--" Canvas.Left="1345" Canvas.Top="10" Width="24" Click="minimizeApplicationClick"/>
 
     </Canvas>
 </Window>

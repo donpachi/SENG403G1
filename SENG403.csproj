@@ -156,10 +156,10 @@
     <Resource Include="Resource\clock_canvas.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resource\Main.ico" />
+    <Resource Include="Resource\Main.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Icon1.ico" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

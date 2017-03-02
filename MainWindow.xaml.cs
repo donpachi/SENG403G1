@@ -1,5 +1,4 @@
-﻿#define DEMO
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -27,7 +26,7 @@ namespace SENG403
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        System.Windows.Forms.NotifyIcon ni;
         Time time;
         SoundModule sound = new SoundModule();         //base sound module to be copied into each alarm
                                                         // (each alarm gets their own instance which can be set accordingly)
@@ -38,9 +37,7 @@ namespace SENG403
         public MainWindow()
         {
             InitializeComponent();
-
-            System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
-            ni.Icon = new System.Drawing.Icon("Main.ico");
+            CreateTrayIcon();
 
             this.KeyUp += MainWindow_KeyUp;
             time = new Time(minute_hand_image, second_hand_image, hour_hand_image, time_label, date_label);
@@ -106,12 +103,32 @@ namespace SENG403
             }
         }
 
+        //event method to trigger when the window changes states
         protected override void OnStateChanged(EventArgs e)
         {
-            if (WindowState == WindowState.Minimized)
-                this.Hide();
 
             base.OnStateChanged(e);
+        }
+
+        private void MinimizeWindow()
+        {
+            if (this.WindowState == WindowState.Maximized || this.WindowState == WindowState.Normal)
+            {
+                this.Hide();
+                this.WindowState = WindowState.Minimized;
+                time.DisableAnimations();
+            }
+        }
+
+        private void MaximizeWindow()
+        {
+            if (this.WindowState == WindowState.Minimized)
+            {
+                ni.Visible = false;
+                this.Show();
+                this.WindowState = WindowState.Maximized;
+                time.EnableAnimations();
+            }
         }
 
         // Once the window has been closed, update the settings
@@ -124,6 +141,7 @@ namespace SENG403
 
         public void onAlarmRing()
         {
+            MaximizeWindow();
             Console.WriteLine("ring");
             textBlock.Text = alarmHandler.getCurrentAlarm().getMessage();
             textBlock.Visibility = Visibility.Visible;
@@ -131,46 +149,31 @@ namespace SENG403
             buttonSnoozeAlarm.Visibility = Visibility.Visible;
         }
 
+        private void CreateTrayIcon()
+        {
+            ni = new System.Windows.Forms.NotifyIcon();
+            ni.Icon = new System.Drawing.Icon("Resource/Main.ico");
+            ni.Visible = true;
+            ni.DoubleClick +=
+                delegate (object sender, EventArgs args)
+                {
+                    this.Show();
+                    MaximizeWindow();
+                };
+            
+        }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
-                time.DisableAnimations();
-                this.WindowState = System.Windows.WindowState.Minimized;
+                this.Close();
             }
             if (e.Key == Key.B)
             {
                 digital_canvas.Visibility = Visibility.Visible;
                 analog_canvas.Visibility = Visibility.Visible;
             }
-
-#if DEMO    //allow custom time manipulation
-            if(e.Key == Key.Right)
-            {
-                //TODO increment tick rate
-            }
-
-            if(e.Key == Key.Left)
-            {
-                //TODO decrement tick rate
-            }
-
-            if(e.Key == Key.Up)
-            {
-                //TODO increment day
-            }
-
-            if (e.Key == Key.Down)
-            {
-                //TODO decrement day
-            }
-
-            if (e.Key == Key.Space)
-            {
-                //TODO resume normal speed
-            }
-#endif
         }
 
         // Get all set values on the interface and send them to the alarm class to make an alarm
@@ -352,5 +355,14 @@ namespace SENG403
             buttonEditAlarm.Visibility = Visibility.Visible;
         }
 
+        private void closeApplicationClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void minimizeApplicationClick(object sender, RoutedEventArgs e)
+        {
+            MinimizeWindow();
+        }
     }
 }
