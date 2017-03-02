@@ -48,6 +48,8 @@ namespace SENG403
                 comboBoxSounds.Items.Add(availableSounds[i]);
             }
 
+            updateAlarmsList();
+
             Alarm.onRing += onAlarmRing;
         }
 
