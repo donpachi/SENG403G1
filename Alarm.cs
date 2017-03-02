@@ -43,6 +43,18 @@ namespace SENG403
             startclock();
         }
 
+
+        /// <summary>
+        /// Returns the current list of alarms in the alarmList arraylist.
+        /// </summary>
+        public Alarm[] getAlarms()
+        {
+            Alarm[] theAlarms = new Alarm[alarmList.Count];
+            alarmList.CopyTo(theAlarms);
+            return theAlarms;
+        }
+
+
         /// <summary>
         /// Return a list of Alarms derived from the String array stored in Properties.Settings.
         /// Populates the list with alarms set in previous sessions.
@@ -61,7 +73,10 @@ namespace SENG403
                 SoundModule sm = new SoundModule();
                 sm.setSound(split[5]);
 
-                Alarm alarm = new Alarm(time, days, sm);
+                // TEMPORARY FIX? -Austin
+                string t = "";
+
+                Alarm alarm = new Alarm(time, days, sm, t);
                 alarm.setRepeat(Convert.ToBoolean(split[3]));
                 alarm.setSetTime(setTime);
                 list.Add(alarm);
@@ -172,10 +187,10 @@ namespace SENG403
         /// <param name="time">The time the alarm is set to trigger on</param>
         /// <param name="days">The days the alarm is set to trigger on</param>
         /// <param name="alarmSound">The alarm sound set to play once the alarm goes off.</param>
-        public void setNewAlarm(DateTime time, String days, SoundModule alarmSound)
+        public void setNewAlarm(DateTime time, String days, SoundModule alarmSound, String message)
         {
             // Create a new alarm and append it to the alarmList
-            alarmList.Add(new Alarm(time, days, alarmSound));
+            alarmList.Add(new Alarm(time, days, alarmSound, message));
         }
 
         /// <summary>
@@ -215,6 +230,8 @@ namespace SENG403
         }
     }
 
+
+
     /// <summary>
     /// Alarm object containing all relevant information as to when the alarm goes off and what alarm sound it plays.
     /// </summary>
@@ -226,6 +243,7 @@ namespace SENG403
         String days;
         Boolean repeat = false;
         bool currentlyRinging;
+        String message;
         SoundModule alarmSound;
 
         public delegate void alarmEvent();
@@ -241,14 +259,23 @@ namespace SENG403
         }
 
         // Alarm constructor
-        public Alarm(DateTime time, string days, SoundModule alarmSound)
+        public Alarm(DateTime time, string days, SoundModule alarmSound, String message)
         {
             this.time = time;
             this.settime = time;
             this.days = days;
             this.alarmSound = alarmSound;
+            if (message != "")
+            {
+                this.message = message;
+            } else
+            {
+                message = "Alarm Triggered";
+            }
             if (days != "0000000") { repeat = true; }
         }
+
+        public String getMessage() { return message; }
 
         /// <summary>
         /// Return the time this alarm is set to ring.

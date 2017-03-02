@@ -22,7 +22,7 @@ namespace SENG403
         public SoundModule()
         {
             loadSounds();
-            currentSound = "Sounds\\squarearp1.wav";
+            currentSound = "Sounds\\squarearp1.wav";        //default sound
         }
 
         //set the sound that is to be played by this SoundModule
@@ -72,6 +72,7 @@ namespace SENG403
             return availableSounds;
         }
 
+
         // Returns element i in the availableSounds array.
         public String getSound(int i)
         {
@@ -84,7 +85,6 @@ namespace SENG403
                
             }
             return "";
-            
         }
 
 

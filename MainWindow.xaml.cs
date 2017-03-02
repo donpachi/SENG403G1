@@ -46,7 +46,6 @@ namespace SENG403
             time = new Time(minute_hand_image, second_hand_image, hour_hand_image, time_label, date_label);
             time.Start();
 
-
             // populate sounds comboBox with available .wav files in Sound directory
             string[] availableSounds = sound.getSounds();
             for(int i = 0; i<availableSounds.Length; i++)
@@ -54,10 +53,57 @@ namespace SENG403
                 comboBoxSounds.Items.Add(availableSounds[i]);
             }
 
-            Alarm.onRing += onAlarmRing;
-            //aRingingAlarm.alarmIsRinging += ringingAlarm;             //currently causes nullpointerexception,
-                                                                        // see setRinging() method in Alarm class
+            updateAlarmsList();
 
+            Alarm.onRing += onAlarmRing;
+        }
+
+        /// <summary>
+        /// Gets the current list of alarms from the alarm class alarmList and updates the UI alarm list.
+        /// </summary>
+        public void updateAlarmsList()
+        {
+            Alarm[] theAlarms = alarmHandler.getAlarms();
+            for(int i = 0; i< theAlarms.Length; i++)
+            {
+                string daysCode = theAlarms[i].getDays();
+                string daysConverted = "";
+                for(int j = 0; j<daysCode.Length; j++)
+                {
+                    char c = daysCode[j];
+                    if (c.Equals('1')){
+                        switch (j)
+                        {
+                            case 0:
+                                daysConverted += "Su. ";
+                                break;
+                            case 1:
+                                daysConverted += "Mo. ";
+                                break;
+                            case 2:
+                                daysConverted += "Tu. ";
+                                break;
+                            case 3:
+                                daysConverted += "We. ";
+                                break;
+                            case 4:
+                                daysConverted += "Th. ";
+                                break;
+                            case 5:
+                                daysConverted += "Fr. ";
+                                break;
+                            case 6:
+                                daysConverted += "Sa. ";
+                                break;
+                        }
+                    }
+                }
+
+                String nextAlarm = "Alarm " + (i + 1) + ": " + theAlarms[i].getDateTime()+" "+daysConverted;
+                //only add the alarm if it isn't in the list already
+                if (!alarmList.Items.Contains(nextAlarm))
+                    alarmList.Items.Add(nextAlarm);
+            }
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -75,17 +121,15 @@ namespace SENG403
             Properties.Settings.Default.Save();
         }
 
+
         public void onAlarmRing()
         {
+            Console.WriteLine("ring");
+            textBlock.Text = alarmHandler.getCurrentAlarm().getMessage();
+            textBlock.Visibility = Visibility.Visible;
             buttonDismissAlarm.Visibility = Visibility.Visible;
             buttonSnoozeAlarm.Visibility = Visibility.Visible;
         }
-
-        //// custom event for handling a ringing alarm from an alarm object
-        //public void ringingAlarm(object sender, EventArgs e)
-        //{
-        //    buttonDismissAlarm.Visibility = Visibility.Visible;
-        //}
 
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
@@ -162,6 +206,7 @@ namespace SENG403
             if (checkBox_Saturday.IsChecked == true) { alarmDaysChecked += "1"; }
             else { alarmDaysChecked += "0"; }
 
+            String message = messageBox.Text;
             //TEMPRORARY/ROUGH to make functionality work:
             DateTime theTime = new System.DateTime(System.DateTime.Now.Year, System.DateTime.Now.Month,
                 System.DateTime.Now.Day, theHour, theMinute, 0);
@@ -173,9 +218,13 @@ namespace SENG403
             //TODO: need to pass in snooze time
 
             // create new alarm object
-            alarmHandler.setNewAlarm(theTime, alarmDaysChecked, sound);
+            alarmHandler.setNewAlarm(theTime, alarmDaysChecked, sound, message);
+
+            //update the UI with all alarms in the alarm arraylist
+            updateAlarmsList();
 
             canvasAlarmSet.Visibility = Visibility.Hidden;
+            alarmList.Visibility = Visibility.Visible;
             buttonSetAlarm.Visibility = Visibility.Visible;
 
             // DEBUG - print out days checked to console
@@ -185,6 +234,7 @@ namespace SENG403
         private void clickButtonCancel(object sender, RoutedEventArgs e)
         {
             canvasAlarmSet.Visibility = Visibility.Hidden;
+            alarmList.Visibility = Visibility.Visible;
             time_canvas.Visibility = Visibility.Visible;
             buttonSetAlarm.Visibility = Visibility.Visible;
         }
@@ -241,6 +291,7 @@ namespace SENG403
         private void clickSnooze(object sender, RoutedEventArgs e)
         {
             alarmHandler.getCurrentAlarm().snooze(snoozeTime);
+            textBlock.Visibility = Visibility.Hidden;
             buttonDismissAlarm.Visibility = Visibility.Hidden;
             buttonSnoozeAlarm.Visibility = Visibility.Hidden;
         }
@@ -250,6 +301,7 @@ namespace SENG403
         {
             Alarm ringingAlarm = alarmHandler.getCurrentAlarm();
             ringingAlarm.setRinging(false);
+            buttonSnoozeAlarm.Visibility = Visibility.Hidden;
             buttonDismissAlarm.Visibility = Visibility.Hidden;
             buttonSnoozeAlarm.Visibility = Visibility.Hidden;
             alarmHandler.endAlarm(ringingAlarm);
@@ -281,10 +333,24 @@ namespace SENG403
         // Hides the Time Display base canvas and makes the set alarm canvas visible
         private void gotoSetAlarm(object sender, RoutedEventArgs e)
         {
+            alarmList.Visibility = Visibility.Hidden;
             buttonSetAlarm.Visibility = Visibility.Hidden;
             canvasAlarmSet.Visibility = Visibility.Visible;
         }
+
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
         //=================================================================== end time display screen listeners
         #endregion
+
+
+        //listener for selecting an alarm in the alarm UI list
+        private void selectedAlarmItem(object sender, SelectionChangedEventArgs e)
+        {
+            buttonEditAlarm.Visibility = Visibility.Visible;
+        }
+
     }
 }
