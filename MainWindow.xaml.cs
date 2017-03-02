@@ -60,6 +60,7 @@ namespace SENG403
         /// </summary>
         public void updateAlarmsList()
         {
+            alarmList.Items.Clear();
             Alarm[] theAlarms = alarmHandler.getAlarms();
             for(int i = 0; i< theAlarms.Length; i++)
             {
@@ -130,6 +131,8 @@ namespace SENG403
                 time.EnableAnimations();
             }
         }
+
+
 
         // Once the window has been closed, update the settings
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -229,7 +232,8 @@ namespace SENG403
             canvasAlarmSet.Visibility = Visibility.Hidden;
             alarmList.Visibility = Visibility.Visible;
             buttonSetAlarm.Visibility = Visibility.Visible;
-
+            buttonEditAlarm.Visibility = Visibility.Visible;
+            buttonDeleteAlarm.Visibility = Visibility.Visible;
             // DEBUG - print out days checked to console
             // System.Diagnostics.Debug.WriteLine("DAYS: "+alarmDaysChecked);
         }
@@ -304,10 +308,12 @@ namespace SENG403
         {
             Alarm ringingAlarm = alarmHandler.getCurrentAlarm();
             ringingAlarm.setRinging(false);
+            textBlock.Visibility = Visibility.Hidden;
             buttonSnoozeAlarm.Visibility = Visibility.Hidden;
             buttonDismissAlarm.Visibility = Visibility.Hidden;
             buttonSnoozeAlarm.Visibility = Visibility.Hidden;
             alarmHandler.endAlarm(ringingAlarm);
+            updateAlarmsList();
         }
         //=================================================================== end active alarm screen listeners
 
@@ -337,6 +343,8 @@ namespace SENG403
         private void gotoSetAlarm(object sender, RoutedEventArgs e)
         {
             alarmList.Visibility = Visibility.Hidden;
+            buttonEditAlarm.Visibility = Visibility.Hidden;
+            buttonDeleteAlarm.Visibility = Visibility.Hidden;
             buttonSetAlarm.Visibility = Visibility.Hidden;
             canvasAlarmSet.Visibility = Visibility.Visible;
         }
@@ -353,6 +361,7 @@ namespace SENG403
         private void selectedAlarmItem(object sender, SelectionChangedEventArgs e)
         {
             buttonEditAlarm.Visibility = Visibility.Visible;
+            buttonDeleteAlarm.Visibility = Visibility.Visible;
         }
 
         private void closeApplicationClick(object sender, RoutedEventArgs e)
@@ -363,6 +372,23 @@ namespace SENG403
         private void minimizeApplicationClick(object sender, RoutedEventArgs e)
         {
             MinimizeWindow();
+        }
+
+        private void deleteClick(object sender, RoutedEventArgs e)
+        {
+            string selectedAlarm = alarmList.SelectedItem.ToString();
+            if (selectedAlarm == null) { return; }
+            else
+            {
+                for (int n = 1; n <= alarmHandler.getAlarms().Length; n++)
+                {
+                    if (selectedAlarm.Contains("Alarm " + n))
+                    {
+                        alarmHandler.deleteAlarm(alarmHandler.getAlarms()[n - 1]);
+                        updateAlarmsList();
+                    }
+                }
+            }
         }
     }
 }
