@@ -61,7 +61,10 @@ namespace SENG403
                 SoundModule sm = new SoundModule();
                 sm.setSound(split[5]);
 
-                Alarm alarm = new Alarm(time, days, sm);
+                // TEMPORARY FIX? -Austin
+                string t = "";
+
+                Alarm alarm = new Alarm(time, days, sm, t);
                 alarm.setRepeat(Convert.ToBoolean(split[3]));
                 alarm.setSetTime(setTime);
                 list.Add(alarm);
