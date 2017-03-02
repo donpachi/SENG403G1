@@ -109,7 +109,7 @@ namespace SENG403
 
         /// <summary>
         /// End the alarm and set it to the next scheduled date if repeat is true
-        //  Otherwise, delete the alarm from the alarm list
+        /// Otherwise, delete the alarm from the alarm list
         /// </summary>
         /// <param name="alarm">The alarm object to end or set to repeat</param>
         public void endAlarm(Alarm alarm)

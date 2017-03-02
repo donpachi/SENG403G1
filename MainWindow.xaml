@@ -27,6 +27,7 @@
             <ListView x:Name="alarmList" Height="403" Canvas.Left="36" Canvas.Top="174" Width="437.573" Background="#FF141734" BorderThickness="3" BorderBrush="#FF141734" Foreground="White" SelectionChanged="selectedAlarmItem">
             </ListView>
             <Button x:Name="buttonEditAlarm" Content="Edit Alarm" Canvas.Left="196" Canvas.Bottom="150" Width="107" Height="56" Canvas.Top="594" Visibility="Hidden"/>
+            <Button x:Name="buttonDeleteAlarm" Content="Delete Alarm" Canvas.Left="196" Canvas.Bottom="150" Width="107" Height="56" Canvas.Top="672" Visibility="Hidden" Click="deleteClick"/>
         </Canvas>
 
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="Your message goes here" Height="221" Width="504" Canvas.Left="455" Canvas.Top="205" Foreground="#FF030303" Background="#FFDDDDDD" FontSize="24" TextAlignment="Center" Visibility="Hidden"/>
