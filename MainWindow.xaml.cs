@@ -111,6 +111,8 @@ namespace SENG403
         public void onAlarmRing()
         {
             Console.WriteLine("ring");
+            textBlock.Text = alarmHandler.getCurrentAlarm().getMessage();
+            textBlock.Visibility = Visibility.Visible;
             buttonDismissAlarm.Visibility = Visibility.Visible;
             buttonSnoozeAlarm.Visibility = Visibility.Visible;
         }
@@ -187,6 +189,7 @@ namespace SENG403
             if (checkBox_Saturday.IsChecked == true) { alarmDaysChecked += "1"; }
             else { alarmDaysChecked += "0"; }
 
+            String message = messageBox.Text;
             //TEMPRORARY/ROUGH to make functionality work:
             DateTime theTime = new System.DateTime(System.DateTime.Now.Year, System.DateTime.Now.Month,
                 System.DateTime.Now.Day, theHour, theMinute, 0);
@@ -198,7 +201,7 @@ namespace SENG403
             //TODO: need to pass in snooze time
 
             // create new alarm object
-            alarmHandler.setNewAlarm(theTime, alarmDaysChecked, sound);
+            alarmHandler.setNewAlarm(theTime, alarmDaysChecked, sound, message);
 
             //update the UI with all alarms in the alarm arraylist
             updateAlarmsList();
@@ -271,6 +274,7 @@ namespace SENG403
         private void clickSnooze(object sender, RoutedEventArgs e)
         {
             alarmHandler.getCurrentAlarm().snooze(snoozeTime);
+            textBlock.Visibility = Visibility.Hidden;
             buttonDismissAlarm.Visibility = Visibility.Hidden;
             buttonSnoozeAlarm.Visibility = Visibility.Hidden;
         }
@@ -280,6 +284,7 @@ namespace SENG403
         {
             Alarm ringingAlarm = alarmHandler.getCurrentAlarm();
             ringingAlarm.setRinging(false);
+            buttonSnoozeAlarm.Visibility = Visibility.Hidden;
             buttonDismissAlarm.Visibility = Visibility.Hidden;
             buttonSnoozeAlarm.Visibility = Visibility.Hidden;
             alarmHandler.endAlarm(ringingAlarm);
@@ -314,6 +319,11 @@ namespace SENG403
             alarmList.Visibility = Visibility.Hidden;
             buttonSetAlarm.Visibility = Visibility.Hidden;
             canvasAlarmSet.Visibility = Visibility.Visible;
+        }
+
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
         //=================================================================== end time display screen listeners
 

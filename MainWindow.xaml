@@ -28,6 +28,8 @@
             </ListView>
             <Button x:Name="buttonEditAlarm" Content="Edit Alarm" Canvas.Left="196" Canvas.Bottom="150" Width="107" Height="56" Click="gotoSetAlarm" Canvas.Top="594" Visibility="Hidden"/>
         </Canvas>
+
+        <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="Your message goes here" Height="221" Width="504" Canvas.Left="455" Canvas.Top="205" Foreground="#FF030303" Background="#FFDDDDDD" FontSize="24" TextAlignment="Center" Visibility="Hidden"/>
         <Button x:Name="buttonDismissAlarm" Content="Dismiss" Canvas.Left="560" Canvas.Bottom="150" Width="300" Height="100" Click="clickDismiss" Canvas.Top="462" FontSize="24" Visibility="Hidden"/>
         <Button x:Name="buttonSnoozeAlarm" Content="Snooze" Canvas.Left="560" Canvas.Bottom="150" Width="300" Height="100" Click="clickSnooze" Canvas.Top="602" FontSize="24" Visibility="Hidden"/>
 
@@ -40,6 +42,7 @@
                 <CheckBox x:Name="checkBox_Thursday" Content="Thursday" Foreground="White" Canvas.Top="80.392"/>
                 <CheckBox x:Name="checkBox_Friday" Content="Friday" Foreground="White" Canvas.Top="100.49"/>
                 <CheckBox x:Name="checkBox_Saturday" Content="Saturday" Foreground="White" Canvas.Top="120.588"/>
+                <TextBox x:Name="messageBox" Height="25" TextWrapping="Wrap" Text="No Message Set" Width="224" Canvas.Top="168"/>
             </Canvas>
             <Canvas x:Name="canvasSnoozeOptions" Height="136" Canvas.Left="1664" Canvas.Top="634" Width="78">
                 <RadioButton x:Name="radioButton_1min" Content="1   Minute" Foreground="White" Checked="select1Min"/>
