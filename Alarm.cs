@@ -33,6 +33,18 @@ namespace SENG403
             startclock();
         }
 
+
+        /// <summary>
+        /// Returns the current list of alarms in the alarmList arraylist.
+        /// </summary>
+        public Alarm[] getAlarms()
+        {
+            Alarm[] theAlarms = new Alarm[alarmList.Count];
+            alarmList.CopyTo(theAlarms);
+            return theAlarms;
+        }
+
+
         /// <summary>
         /// Returns the currently ringing/active alarm
         /// </summary>
@@ -165,6 +177,8 @@ namespace SENG403
             throw new Exception("Day of the week..");
         }
     }
+
+
 
     /// <summary>
     /// Alarm object containing all relevant information as to when the alarm goes off and what alarm sound it plays.
