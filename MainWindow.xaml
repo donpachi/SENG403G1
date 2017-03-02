@@ -24,9 +24,11 @@
             <Button x:Name="buttonSetAlarm" Content="Set Alarm" Canvas.Left="196.5" Canvas.Bottom="150" Width="107" Height="56" Click="gotoSetAlarm"/>
             <Label x:Name="date_label" Content="Saturday, February 28, 2222" Canvas.Left="36" Canvas.Top="45" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35" />
         </Canvas>
+
+        <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="Your message goes here" Height="221" Width="504" Canvas.Left="455" Canvas.Top="205" Foreground="#FF030303" Background="#FFDDDDDD" FontSize="24" TextAlignment="Center" Visibility="Hidden"/>
         <Button x:Name="buttonDismissAlarm" Content="Dismiss" Canvas.Left="560" Canvas.Bottom="150" Width="300" Height="100" Click="clickDismiss" Canvas.Top="462" FontSize="24" Visibility="Hidden"/>
         <Button x:Name="buttonSnoozeAlarm" Content="Snooze" Canvas.Left="560" Canvas.Bottom="150" Width="300" Height="100" Click="clickSnooze" Canvas.Top="602" FontSize="24" Visibility="Hidden"/>
-        
+
         <Canvas x:Name="canvasAlarmSet" Visibility="Hidden">
             <Canvas x:Name="canvasDayOptions" Height="136" Canvas.Left="1561" Canvas.Top="634" Width="81">
                 <CheckBox x:Name="checkBox_Sunday" Content="Sunday" Foreground="White"/>
@@ -36,6 +38,7 @@
                 <CheckBox x:Name="checkBox_Thursday" Content="Thursday" Foreground="White" Canvas.Top="80.392"/>
                 <CheckBox x:Name="checkBox_Friday" Content="Friday" Foreground="White" Canvas.Top="100.49"/>
                 <CheckBox x:Name="checkBox_Saturday" Content="Saturday" Foreground="White" Canvas.Top="120.588"/>
+                <TextBox x:Name="messageBox" Height="25" TextWrapping="Wrap" Text="No Message Set" Width="224" Canvas.Top="168"/>
             </Canvas>
             <Canvas x:Name="canvasSnoozeOptions" Height="136" Canvas.Left="1664" Canvas.Top="634" Width="78">
                 <RadioButton x:Name="radioButton_1min" Content="1   Minute" Foreground="White" Checked="select1Min"/>
@@ -60,6 +63,7 @@
         </Canvas>
 
         <ToggleButton x:Name="toggleDisplayButton" Content="Digital" Canvas.Left="1328" Canvas.Top="1038" Width ="80" Height="32" Click="displayModeToggle"/>
-        
+
+
     </Canvas>
 </Window>
