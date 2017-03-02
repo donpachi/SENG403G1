@@ -316,5 +316,14 @@ namespace SENG403
             canvasAlarmSet.Visibility = Visibility.Visible;
         }
         //=================================================================== end time display screen listeners
+
+
+        //listener for selecting an alarm in the alarm UI list
+        private void selectedAlarmItem(object sender, SelectionChangedEventArgs e)
+        {
+            buttonEditAlarm.Visibility = Visibility.Visible;
+        }
+
+
     }
 }
