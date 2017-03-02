@@ -21,6 +21,7 @@ using System.ComponentModel;
 namespace SENG403
 {
 
+    Boolean editVal = false;
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -386,6 +387,26 @@ namespace SENG403
                     {
                         alarmHandler.deleteAlarm(alarmHandler.getAlarms()[n - 1]);
                         updateAlarmsList();
+                    }
+                }
+            }
+        }
+
+        private void editAlarmClick(object sender, RoutedEventArgs e)
+        {
+            editVal = true;
+            Alarm alarm;
+            string selectedAlarm = alarmList.SelectedItem.ToString();
+            if (selectedAlarm == null) { return; }
+            else
+            {
+                for (int n = 1; n <= alarmHandler.getAlarms().Length; n++)
+                {
+                    if (selectedAlarm.Contains("Alarm " + n))
+                    {
+                        alarm = alarmHandler.getAlarms()[n - 1];
+                        messageBox.Text = alarm.getMessage();
+
                     }
                 }
             }
