@@ -357,6 +357,7 @@ namespace SENG403
                     {
                         alarmHandler.deleteAlarm(alarmHandler.getAlarms()[n - 1]);
                         updateAlarmsList();
+                        int i = 0;
                     }
                 }
             }
