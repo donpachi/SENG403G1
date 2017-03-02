@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,23 +12,32 @@ namespace SENG403
     /// Alarmhandler that handles setting up, creating and ending alarms.
     /// It also handles starting a system clock and determining the current day of the week.
     /// </summary>
+
     public class AlarmHandler
     {
+
         // Create a list of Alarms
-        List<Alarm> alarmList;
+        public List<Alarm> alarmList;
 
         // The current alarm; once an alarm has been triggered it is the current alarm
         // Until the user dismisses it or snoozes it
-        Alarm currentAlarm;
+        public Alarm currentAlarm;
 
         // Constructor for AlarmHandler class
         public AlarmHandler()
         {
-            // Create a list of Alarms
-            this.alarmList = new List<Alarm>();
-
             // The Currently RINGING alarm, if applicable
             this.currentAlarm = null;
+            //Properties.Settings.Default.Reset();
+
+            if (Properties.Settings.Default.alarmArray == null)
+            {
+                Properties.Settings.Default.alarmArray = new List<string>();
+                Properties.Settings.Default.Save();
+            }
+
+            // Create a list of Alarms and populate it with any previously set alarms
+            this.alarmList = populateAlarmList(); 
 
             // Start the clock
             startclock();
@@ -44,6 +54,46 @@ namespace SENG403
             return theAlarms;
         }
 
+
+        /// <summary>
+        /// Return a list of Alarms derived from the String array stored in Properties.Settings.
+        /// Populates the list with alarms set in previous sessions.
+        /// </summary>
+        /// <returns>List of Alarms</returns>
+        public List<Alarm> populateAlarmList()
+        {
+            List<Alarm> list = new List<Alarm>();
+
+            foreach (String setting in Properties.Settings.Default.alarmArray)
+            {
+                string[] split = setting.Split('\n');
+                DateTime setTime = Convert.ToDateTime(split[0]);
+                DateTime time = Convert.ToDateTime(split[1]);
+                string days = split[2];
+                SoundModule sm = new SoundModule();
+                sm.setSound(split[5]);
+
+                Alarm alarm = new Alarm(time, days, sm);
+                alarm.setRepeat(Convert.ToBoolean(split[3]));
+                alarm.setSetTime(setTime);
+                list.Add(alarm);
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Update the settings file with any new alarms.
+        /// </summary>
+        public void populateSettings()
+        {
+            List<string> list = new List<string>();
+
+            foreach (Alarm alarm in alarmList)
+            {
+                list.Add(alarm.getSetTime() + "\n" + alarm.getTime() + "\n" + alarm.getDays() + "\n" + alarm.getRepeat() + "\n" + alarm.getCurrentlyRinging() + "\n" + alarm.getSound());
+            }
+            Properties.Settings.Default.alarmArray = list;
+        }
 
         /// <summary>
         /// Returns the currently ringing/active alarm
@@ -129,7 +179,7 @@ namespace SENG403
 
         /// <summary>
         /// Handle the input data once the "set alarm" button is pressed
-        //  Days string should be 7 digits long, "1" represents a selected day, "0" represents a non-selected day
+        /// Days string should be 7 digits long, "1" represents a selected day, "0" represents a non-selected day
         /// </summary>
         /// <param name="time">The time the alarm is set to trigger on</param>
         /// <param name="days">The days the alarm is set to trigger on</param>
@@ -137,8 +187,7 @@ namespace SENG403
         public void setNewAlarm(DateTime time, String days, SoundModule alarmSound)
         {
             // Create a new alarm and append it to the alarmList
-            alarmList.Add(new Alarm(time, days, alarmSound)); 
-
+            alarmList.Add(new Alarm(time, days, alarmSound));
         }
 
         /// <summary>
@@ -185,7 +234,7 @@ namespace SENG403
     /// </summary>
     public class Alarm
     {
-        String period; // AM or PM setting - may not be necessary
+        
         DateTime settime;
         DateTime time;
         String days;
@@ -210,7 +259,6 @@ namespace SENG403
         {
             this.time = time;
             this.settime = time;
-            this.period = null; // AM or PM setting
             this.days = days;
             this.alarmSound = alarmSound;
             if (days != "0000000") { repeat = true; }
@@ -252,8 +300,6 @@ namespace SENG403
         /// <returns>The repeat value of the alarm.</returns>
         public Boolean getRepeatVal() { return repeat; }
 
-
-        // Set the boolean value true/false depending on whether the alarm is ringing
         /// <summary>
         /// Set the boolean value true/false depending on whether the alarm is ringing
         /// </summary>
@@ -270,6 +316,24 @@ namespace SENG403
         }
 
         /// <summary>
+        /// Set the repeat value based on the boolean input.
+        /// </summary>
+        /// <param name="val"></param>
+        public void setRepeat(bool val)
+        {
+            this.repeat = val;
+        }
+
+        /// <summary>
+        /// Set the setTime value.
+        /// </summary>
+        /// <param name="dt"></param>
+        public void setSetTime(DateTime dt)
+        {
+            this.settime = dt;
+        }
+
+        /// <summary>
         /// Return whether the alarm is currently ringing or not.
         /// </summary>
         /// <returns>Boolean value representing the alarms ringing state.</returns>
@@ -278,8 +342,34 @@ namespace SENG403
             return this.currentlyRinging;
         }
 
+        /// <summary>
+        /// Return the set time.
+        /// </summary>
+        /// <returns></returns>
+        public String getSetTime() { return this.settime.ToString(); }
+
+        /// <summary>
+        /// Return the time.
+        /// </summary>
+        /// <returns></returns>
+        public String getTime() { return this.time.ToString(); }
+
+        /// <summary>
+        /// Return the repeat value.
+        /// </summary>
+        /// <returns></returns>
+        public String getRepeat() { return this.repeat.ToString(); }
+
+        /// <summary>
+        /// Return whether the alarm is currently ringing.
+        /// </summary>
+        /// <returns></returns>
+        public String getCurrentlyRinging() { return this.currentlyRinging.ToString(); }
+
+        /// <summary>
+        /// Return the alarm sound of the alarm.
+        /// </summary>
+        /// <returns></returns>
+        public String getSound() { return this.alarmSound.currentSound; }
     }
-
-
-
 }

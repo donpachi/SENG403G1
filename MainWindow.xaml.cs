@@ -16,6 +16,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.IO;
+using System.ComponentModel;
+
 namespace SENG403
 {
 
@@ -95,6 +97,14 @@ namespace SENG403
                 if (!alarmList.Items.Contains(nextAlarm))
                     alarmList.Items.Add(nextAlarm);
             }
+        }
+
+
+        // Once the window has been closed, update the settings
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            alarmHandler.populateSettings();
+            Properties.Settings.Default.Save();
         }
 
 
