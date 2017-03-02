@@ -113,7 +113,7 @@ namespace SENG403
                 secImage.RenderTransform = transform;
             }
 
-            if (renderMode == RenderMode.RenderMinutes)
+            else if (renderMode == RenderMode.RenderMinutes)
             {
                 RotateTransform transform = new RotateTransform(minuteDegrees, minImage.Width / 2, minImage.Height / 2);
                 minImage.RenderTransform = transform;
@@ -183,7 +183,7 @@ namespace SENG403
 
             if (currHour == 12 && currMin == 0 && currSec >= 0)
             {
-                dateLabel.Content = getDate();
+                dateLabel.Content = GetDate();
             }
                
 

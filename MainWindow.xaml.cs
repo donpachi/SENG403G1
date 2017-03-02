@@ -1,6 +1,7 @@
 ﻿#define DEMO
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -38,7 +39,8 @@ namespace SENG403
         {
             InitializeComponent();
 
-
+            System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
+            ni.Icon = new System.Drawing.Icon("Main.ico");
 
             this.KeyUp += MainWindow_KeyUp;
             time = new Time(minute_hand_image, second_hand_image, hour_hand_image, time_label, date_label);
@@ -56,6 +58,14 @@ namespace SENG403
             //aRingingAlarm.alarmIsRinging += ringingAlarm;             //currently causes nullpointerexception,
                                                                         // see setRinging() method in Alarm class
 
+        }
+
+        protected override void OnStateChanged(EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
+                this.Hide();
+
+            base.OnStateChanged(e);
         }
 
         // Once the window has been closed, update the settings
