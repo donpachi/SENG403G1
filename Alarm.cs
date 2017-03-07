@@ -37,7 +37,7 @@ namespace SENG403
             }
 
             // Create a list of Alarms and populate it with any previously set alarms
-            this.alarmList = populateAlarmList(); 
+            this.alarmList = populateAlarmList();
 
             // Start the clock
             startclock();
@@ -72,6 +72,7 @@ namespace SENG403
                 string days = split[2];
                 SoundModule sm = new SoundModule();
                 sm.setSound(split[5]);
+                String message = split[6];
 
                 // TEMPORARY FIX? -Austin
                 string t = "";
@@ -79,7 +80,9 @@ namespace SENG403
                 Alarm alarm = new Alarm(time, days, sm, t);
                 alarm.setRepeat(Convert.ToBoolean(split[3]));
                 alarm.setSetTime(setTime);
+                alarm.setMessage(message);
                 list.Add(alarm);
+
             }
             return list;
         }
@@ -93,7 +96,7 @@ namespace SENG403
 
             foreach (Alarm alarm in alarmList)
             {
-                list.Add(alarm.getSetTime() + "\n" + alarm.getTime() + "\n" + alarm.getDays() + "\n" + alarm.getRepeat() + "\n" + alarm.getCurrentlyRinging() + "\n" + alarm.getSound());
+                list.Add(alarm.getSetTime() + "\n" + alarm.getTime() + "\n" + alarm.getDays() + "\n" + alarm.getRepeat() + "\n" + alarm.getCurrentlyRinging() + "\n" + alarm.getSound() + "\n" + alarm.getMessage());
             }
             Properties.Settings.Default.alarmArray = list;
         }
@@ -166,7 +169,7 @@ namespace SENG403
             // If so, set the alarm to ring
             foreach (Alarm alarm in alarmList)
             {
-                
+
                 // If the current time is one of the alarms, then check if the day is also correct
                 if (DateTime.Now.ToString("T").Equals(alarm.getDateTime().ToString()))
                 {
@@ -237,7 +240,7 @@ namespace SENG403
     /// </summary>
     public class Alarm
     {
-        
+
         DateTime settime;
         DateTime time;
         String days;
@@ -268,7 +271,8 @@ namespace SENG403
             if (message != "")
             {
                 this.message = message;
-            } else
+            }
+            else
             {
                 message = "Alarm Triggered";
             }
@@ -276,6 +280,11 @@ namespace SENG403
         }
 
         public String getMessage() { return message; }
+
+        public void setMessage(String msg)
+        {
+            message = msg;
+        }
 
         /// <summary>
         /// Return the time this alarm is set to ring.

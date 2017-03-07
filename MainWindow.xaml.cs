@@ -29,7 +29,7 @@ namespace SENG403
         System.Windows.Forms.NotifyIcon ni;
         Time time;
         SoundModule sound = new SoundModule();         //base sound module to be copied into each alarm
-                                                        // (each alarm gets their own instance which can be set accordingly)
+                                                       // (each alarm gets their own instance which can be set accordingly)
         AlarmHandler alarmHandler = new AlarmHandler();
         Double snoozeTime = 0;
 
@@ -45,7 +45,7 @@ namespace SENG403
 
             // populate sounds comboBox with available .wav files in Sound directory
             string[] availableSounds = sound.getSounds();
-            for(int i = 0; i<availableSounds.Length; i++)
+            for (int i = 0; i < availableSounds.Length; i++)
             {
                 comboBoxSounds.Items.Add(availableSounds[i]);
             }
@@ -62,14 +62,15 @@ namespace SENG403
         {
             alarmList.Items.Clear();
             Alarm[] theAlarms = alarmHandler.getAlarms();
-            for(int i = 0; i< theAlarms.Length; i++)
+            for (int i = 0; i < theAlarms.Length; i++)
             {
                 string daysCode = theAlarms[i].getDays();
                 string daysConverted = "";
-                for(int j = 0; j<daysCode.Length; j++)
+                for (int j = 0; j < daysCode.Length; j++)
                 {
                     char c = daysCode[j];
-                    if (c.Equals('1')){
+                    if (c.Equals('1'))
+                    {
                         switch (j)
                         {
                             case 0:
@@ -97,7 +98,7 @@ namespace SENG403
                     }
                 }
 
-                String nextAlarm = "Alarm " + (i + 1) + ": " + theAlarms[i].getDateTime()+" "+daysConverted;
+                String nextAlarm = "Alarm " + (i + 1) + ": " + theAlarms[i].getDateTime() + " " + daysConverted;
                 //only add the alarm if it isn't in the list already
                 if (!alarmList.Items.Contains(nextAlarm))
                     alarmList.Items.Add(nextAlarm);
@@ -163,7 +164,7 @@ namespace SENG403
                     this.Show();
                     MaximizeWindow();
                 };
-            
+
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
