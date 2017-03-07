@@ -72,6 +72,7 @@ namespace SENG403
                 string days = split[2];
                 SoundModule sm = new SoundModule();
                 sm.setSound(split[5]);
+                String message = split[6];
 
                 // TEMPORARY FIX? -Austin
                 string t = "";
@@ -79,7 +80,9 @@ namespace SENG403
                 Alarm alarm = new Alarm(time, days, sm, t);
                 alarm.setRepeat(Convert.ToBoolean(split[3]));
                 alarm.setSetTime(setTime);
+                alarm.setMessage(message);
                 list.Add(alarm);
+
             }
             return list;
         }
@@ -93,7 +96,7 @@ namespace SENG403
 
             foreach (Alarm alarm in alarmList)
             {
-                list.Add(alarm.getSetTime() + "\n" + alarm.getTime() + "\n" + alarm.getDays() + "\n" + alarm.getRepeat() + "\n" + alarm.getCurrentlyRinging() + "\n" + alarm.getSound());
+                list.Add(alarm.getSetTime() + "\n" + alarm.getTime() + "\n" + alarm.getDays() + "\n" + alarm.getRepeat() + "\n" + alarm.getCurrentlyRinging() + "\n" + alarm.getSound() + "\n" + alarm.getMessage());
             }
             Properties.Settings.Default.alarmArray = list;
         }
@@ -276,6 +279,11 @@ namespace SENG403
         }
 
         public String getMessage() { return message; }
+
+        public void setMessage(String msg)
+        {
+            message = msg;
+        }
 
         /// <summary>
         /// Return the time this alarm is set to ring.
