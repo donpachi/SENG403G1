@@ -384,5 +384,8 @@ namespace SENG403
         /// </summary>
         /// <returns></returns>
         public String getSound() { return this.alarmSound.currentSound; }
+
+        public int getHour() { return this.settime.Hour; }
+        public int getMinute() { return this.settime.Minute; }
     }
 }
