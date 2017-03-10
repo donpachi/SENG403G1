@@ -15,6 +15,12 @@ namespace SENG403
 
     public class AlarmHandler
     {
+        static public event EventHandler CustomEvent;
+
+        static public void RaiseMyCustomEvent(object sender, EventArgs args)
+        {
+            if (CustomEvent != null) CustomEvent(sender, args);
+        }
 
         // Create a list of Alarms
         public List<Alarm> alarmList;
@@ -169,12 +175,17 @@ namespace SENG403
             // If so, set the alarm to ring
             foreach (Alarm alarm in alarmList)
             {
-
                 // If the current time is one of the alarms, then check if the day is also correct
                 if (DateTime.Now.ToString("T").Equals(alarm.getDateTime().ToString()))
                 {
                     if (alarm.getDays() == "0000000" || alarm.getDays()[day].Equals('1'))
                     {
+
+                        if (currentAlarm != null)
+                        {
+                            MissedAlarmHandler.triggerMissedAlarmEvent(this, new MissedAlarmEventArgs());
+                        }
+
                         // Play the alarm and set the current alarm to this alarm
                         currentAlarm = alarm;
                         currentAlarm.setRinging(true);

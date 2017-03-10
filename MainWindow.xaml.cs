@@ -36,6 +36,9 @@ namespace SENG403
 
         public MainWindow()
         {
+
+            MissedAlarmHandler.MissedAlarm += handleMissedAlarm;
+
             InitializeComponent();
             CreateTrayIcon();
 
@@ -53,6 +56,19 @@ namespace SENG403
             updateAlarmsList();
 
             Alarm.onRing += onAlarmRing;
+        }
+
+        // Handle the missed alarm event
+        // Add 'async' before void if we want to implement notification screen disappearing after X seconds
+        private void handleMissedAlarm(object sender, EventArgs e)
+        {
+            // Show the screen that says missed alarm
+            missedAlarmNotification.Visibility = Visibility.Visible;
+
+            // Wait 5 seconds and then hide the screen
+            //await Task.Delay(5000);
+            //missedAlarmNotification.Visibility = Visibility.Hidden;
+
         }
 
         /// <summary>
@@ -299,6 +315,7 @@ namespace SENG403
         private void clickSnooze(object sender, RoutedEventArgs e)
         {
             alarmHandler.getCurrentAlarm().snooze(snoozeTime);
+            alarmHandler.currentAlarm = null;
             textBlock.Visibility = Visibility.Hidden;
             buttonDismissAlarm.Visibility = Visibility.Hidden;
             buttonSnoozeAlarm.Visibility = Visibility.Hidden;
@@ -314,6 +331,7 @@ namespace SENG403
             buttonDismissAlarm.Visibility = Visibility.Hidden;
             buttonSnoozeAlarm.Visibility = Visibility.Hidden;
             alarmHandler.endAlarm(ringingAlarm);
+            alarmHandler.currentAlarm = null;
             updateAlarmsList();
         }
         //=================================================================== end active alarm screen listeners
