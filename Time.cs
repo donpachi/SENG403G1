@@ -23,8 +23,10 @@ namespace SENG403
         public const double MIN_IN_HR = 60;
     }
 
-    public partial class Time
+    public class Time
     {
+        private static double hourOffset = 0;
+        public double HourOffset { get { return hourOffset; } set { hourOffset = value; } }
         public double degreeInterval;
         DispatcherTimer dTimer;
         private double secondDegrees, minuteDegrees, hourDegrees;
@@ -73,6 +75,15 @@ namespace SENG403
             animateClock = true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime Now()
+        {
+            return DateTime.Now.AddHours(hourOffset);
+        }
+
 
         private void updateTime()
         {
@@ -85,7 +96,7 @@ namespace SENG403
             timestring = dateTimeElements[1];
             meridiem = dateTimeElements[2];
             string[] timeElements = dateTimeElements[1].Split(':');
-            currHour = Convert.ToDouble(timeElements[0]);
+            currHour = hourOffset + Convert.ToDouble(timeElements[0]);               //add UTC offset from time zone
             currMin = Convert.ToDouble(timeElements[1]);
             currSec = Convert.ToDouble(timeElements[2]);
         }
