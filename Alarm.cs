@@ -163,7 +163,7 @@ namespace SENG403
         private void tickevent(object sender, EventArgs e)
         {
             // Get the CURRENT date and time in the form: 'yyyy-mm-dd hh:mm:ss AM/PM' (i.e: 2017-01-28 12:20:00 PM)
-            DateTime dateAndTime = Time.Now();
+            DateTime dateAndTime = Clock.Now();
 
             // Creates the day object
             int day = dayofweek(dateAndTime.Day, dateAndTime.Month, dateAndTime.Year);
@@ -176,7 +176,7 @@ namespace SENG403
             foreach (Alarm alarm in alarmList)
             {
                 // If the current time is one of the alarms, then check if the day is also correct
-                if (Time.Now().ToString("T").Equals(alarm.getDateTime().ToString()))
+                if (Clock.Now().ToString("T").Equals(alarm.getDateTime().ToString()))
                 {
                     if (alarm.getDays() == "0000000" || alarm.getDays()[day].Equals('1'))
                     {
@@ -318,7 +318,7 @@ namespace SENG403
         /// <param name="minutes">Minutes that the user wants to snooze the alarm for.</param>
         public void snooze(Double minutes)
         {
-            time = Time.Now().AddMinutes(minutes);
+            time = Clock.Now().AddMinutes(minutes);
             alarmSound.stopSound();
         }
 
