@@ -49,8 +49,6 @@ namespace SENG403
             CreateTrayIcon();
 
             this.KeyUp += MainWindow_KeyUp;
-            //time = new Time(minute_hand_image, secondHand.getSecondHandImg(), hour_hand_image, time_label, date_label);
-            //time.Start();
 
             // populate sounds comboBox with available .wav files in Sound directory
             string[] availableSounds = sound.getSounds();
@@ -200,8 +198,8 @@ namespace SENG403
             }
             if (e.Key == Key.B)
             {
-                digital_canvas.Visibility = Visibility.Visible;
-                analog_canvas.Visibility = Visibility.Visible;
+                ClockUC.digital_canvas.Visibility = Visibility.Visible;
+                ClockUC.analog_canvas.Visibility = Visibility.Visible;
             }
         }
 
@@ -336,17 +334,17 @@ namespace SENG403
         // when clicked, if state is analog, switch to digital. Else switch to analog.
         private void displayModeToggle(object sender, RoutedEventArgs e)
         {
-            if (analog_canvas.IsVisible)
+            if (ClockUC.analog_canvas.IsVisible)
             {
                 toggleDisplayButton.Content = "Analog";
-                analog_canvas.Visibility = Visibility.Hidden;
-                digital_canvas.Visibility = Visibility.Visible;
+                ClockUC.analog_canvas.Visibility = Visibility.Hidden;
+                ClockUC.digital_canvas.Visibility = Visibility.Visible;
             }
             else
             {
                 toggleDisplayButton.Content = "Digital";
-                analog_canvas.Visibility = Visibility.Visible;
-                digital_canvas.Visibility = Visibility.Hidden;
+                ClockUC.analog_canvas.Visibility = Visibility.Visible;
+                ClockUC.digital_canvas.Visibility = Visibility.Hidden;
             }
         }
 
