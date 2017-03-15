@@ -36,13 +36,12 @@ namespace SENG403
     public partial class Clock : UserControl
     {
         private static double hourOffset = 0;
-        public double HourOffset { get { return hourOffset; } set {hourOffset = value; } }
+        public double HourOffset { get { return hourOffset; } set {hourOffset = value; updateTime(); synchronizeHands(); } }
         public double degreeInterval;
         DispatcherTimer dTimer;
         private double secondDegrees, minuteDegrees, hourDegrees;
         private double currHour, currMin, currSec;
         private string date, timestring, meridiem;
-        Label dateLabel;
         Boolean animateClock;
 
 
@@ -89,7 +88,7 @@ namespace SENG403
         private void updateTime()
         {
             String[] cultureNames = { "en-US" };
-            DateTime currentDateTime = DateTime.Now;
+            DateTime currentDateTime = DateTime.Now.AddHours(hourOffset);
             var culture = new CultureInfo(cultureNames[0]);
             string currentTime = currentDateTime.ToString(culture);
             string[] dateTimeElements = currentTime.Split(' ');
@@ -97,7 +96,7 @@ namespace SENG403
             timestring = dateTimeElements[1];
             meridiem = dateTimeElements[2];
             string[] timeElements = dateTimeElements[1].Split(':');
-            currHour = hourOffset + Convert.ToDouble(timeElements[0]);               //add UTC offset from time zone
+            currHour = Convert.ToDouble(timeElements[0]);               //add UTC offset from time zone
             currMin = Convert.ToDouble(timeElements[1]);
             currSec = Convert.ToDouble(timeElements[2]);
         }
@@ -177,8 +176,8 @@ namespace SENG403
                 hour = currHour.ToString();
             if (meridiem == "PM")
                 hour = (currHour + 12).ToString();
-            if (currHour == 12 && currMin == 0 && currSec >= 0)
-                dateLabel.Content = GetDate();
+            //if (currHour == 12 && currMin == 0 && currSec >= 0)
+            //    date_label.Content = GetDate();
             time_label.Content = hour + " : " + min + " : " + sec;
         }
     }
