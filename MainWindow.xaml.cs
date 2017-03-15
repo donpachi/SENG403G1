@@ -62,14 +62,15 @@ namespace SENG403
 
         // Handle the missed alarm event
         // Add 'async' before void if we want to implement notification screen disappearing after X seconds
-        private async void handleMissedAlarm(object sender, EventArgs e)
+        private void handleMissedAlarm(object sender, EventArgs e)
         {
             // Show the screen that says missed alarm
             missedAlarmNotification.Visibility = Visibility.Visible;
+            dismissButton.Visibility = Visibility.Visible;
 
             // Wait 5 seconds and then hide the screen
-            await Task.Delay(5000);
-            missedAlarmNotification.Visibility = Visibility.Hidden;
+            //await Task.Delay(5000);
+            //missedAlarmNotification.Visibility = Visibility.Hidden;
 
         }
 
@@ -475,6 +476,13 @@ namespace SENG403
             checkBox_Friday.IsChecked = false;
             checkBox_Saturday.IsChecked = false;
             comboBoxSounds.SelectedIndex = 0;
+        }
+
+        private void dismissButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Show the screen that says missed alarm
+            missedAlarmNotification.Visibility = Visibility.Hidden;
+            dismissButton.Visibility = Visibility.Hidden;
         }
     }
 }
