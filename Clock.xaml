@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="SENG403.Clock"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SENG403"
+             mc:Ignorable="d" 
+             d:DesignHeight="834" d:DesignWidth="834">
+    <Canvas>
+        <Canvas x:Name="digital_canvas" Visibility="Hidden">
+            <Label x:Name="time_label" Content="00 : 00 : 00" Width="800" Height="800" FontSize="130"
+               VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Microsoft JhengHei UI"/>
+        </Canvas>
+        <Canvas x:Name="analog_canvas">
+            <Image x:Name="clock_canvas_image" Height="834" Width="834" Source="pack://application:,,,/Resource/clock_canvas.png"/>
+            <Image x:Name="hour_hand_image" Height="192" Canvas.Left="411" Canvas.Top="225" Width="11" Source="pack://application:,,,/Resource/hour_hand.png"/>
+            <Image x:Name="minute_hand_image" Height="297" Canvas.Left="411" Canvas.Top="120" Width="11" Source="pack://application:,,,/Resource/minute_hand.png"/>
+            <Image x:Name="second_hand_image" Height="438" Canvas.Left="414.5" Canvas.Top="20" Width="5" Source="pack://application:,,,/Resource/second_hand.png"/>
+            <Image x:Name="center_pin_image" Height="26" Canvas.Left="404" Canvas.Top="404" Width="26" Source="pack://application:,,,/Resource/center_pin.png"/>
+        </Canvas>
+    </Canvas>
+</UserControl>

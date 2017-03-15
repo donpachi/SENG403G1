@@ -6,7 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace SENG403
@@ -21,30 +27,28 @@ namespace SENG403
         public const double DEG_PER_HOUR = 30;
         public const double SEC_IN_MIN = 60;
         public const double MIN_IN_HR = 60;
+        public const int SECOND_HAND_OFFSET = 41;
     }
 
-    public partial class Time
+    /// <summary>
+    /// Interaction logic for Clock.xaml
+    /// </summary>
+    public partial class Clock : UserControl
     {
+        private static double hourOffset = 0;
+        public double HourOffset { get { return hourOffset; } set {hourOffset = value; } }
         public double degreeInterval;
         DispatcherTimer dTimer;
         private double secondDegrees, minuteDegrees, hourDegrees;
         private double currHour, currMin, currSec;
         private string date, timestring, meridiem;
-        Image minImage, secImage, hrImage;
-        Label timeLabel, dateLabel;
+        Label dateLabel;
         Boolean animateClock;
 
-        public Time(Image min, Image sec, Image hr, Label lb, Label dlb)
-        {
-            minImage = min;
-            secImage = sec;
-            hrImage = hr;
-            timeLabel = lb;
-            dateLabel = dlb;
-        }
 
-        public void Start()
+        public Clock()
         {
+            InitializeComponent();
             degreeInterval = (double)(CONSTANTS.DEG_PER_SEC * CONSTANTS.TICK_INTERVAL_MS) / CONSTANTS.MS_IN_SEC;
             dTimer = new DispatcherTimer();
             dTimer.Tick += new EventHandler(dTimer_Tick);
@@ -53,7 +57,6 @@ namespace SENG403
             updateTime();
             synchronizeHands();
             dTimer.Start();
-            dateLabel.Content = GetDate();
         }
 
         public String GetDate()
@@ -73,6 +76,15 @@ namespace SENG403
             animateClock = true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime Now()
+        {
+            return DateTime.Now.AddHours(hourOffset);
+        }
+
 
         private void updateTime()
         {
@@ -85,7 +97,7 @@ namespace SENG403
             timestring = dateTimeElements[1];
             meridiem = dateTimeElements[2];
             string[] timeElements = dateTimeElements[1].Split(':');
-            currHour = Convert.ToDouble(timeElements[0]);
+            currHour = hourOffset + Convert.ToDouble(timeElements[0]);               //add UTC offset from time zone
             currMin = Convert.ToDouble(timeElements[1]);
             currSec = Convert.ToDouble(timeElements[2]);
         }
@@ -103,54 +115,45 @@ namespace SENG403
             hourDegrees = (currHour * CONSTANTS.DEG_PER_HOUR) + (currMin / CONSTANTS.MIN_IN_HR) * 30;
         }
 
-        private void renderAngles(RenderMode renderMode)
-        {
-
-            if (renderMode == RenderMode.RenderSecond)
-            {
-                RotateTransform transform = new RotateTransform(secondDegrees, secImage.Width / 2, secImage.Height / 2);
+        private void renderAngles(RenderMode renderMode){
+            if (renderMode == RenderMode.RenderSecond){
+                RotateTransform transform = new RotateTransform(secondDegrees, second_hand_image.Width / 2, second_hand_image.Height - CONSTANTS.SECOND_HAND_OFFSET);
                 secondDegrees = (secondDegrees + degreeInterval) >= 360 ? 0 : secondDegrees + degreeInterval;
-                secImage.RenderTransform = transform;
+                second_hand_image.RenderTransform = transform;
             }
 
-            else if (renderMode == RenderMode.RenderMinutes)
-            {
-                RotateTransform transform = new RotateTransform(minuteDegrees, minImage.Width / 2, minImage.Height / 2);
-                minImage.RenderTransform = transform;
+            else if (renderMode == RenderMode.RenderMinutes){
+                RotateTransform transform = new RotateTransform(minuteDegrees, minute_hand_image.Width / 2, minute_hand_image.Height);
+                minute_hand_image.RenderTransform = transform;
             }
-            else if (renderMode == RenderMode.RenderHour)
-            {
-                RotateTransform transform = new RotateTransform(hourDegrees, hrImage.Width / 2, hrImage.Height / 2);
-                hrImage.RenderTransform = transform;
+            else if (renderMode == RenderMode.RenderHour){
+                RotateTransform transform = new RotateTransform(hourDegrees, hour_hand_image.Width / 2, hour_hand_image.Height);
+                hour_hand_image.RenderTransform = transform;
             }
-            else if (renderMode == RenderMode.RenderAll)
-            {
-                RotateTransform transform = new RotateTransform(secondDegrees, secImage.Width / 2, secImage.Height / 2);
-                secImage.RenderTransform = transform;
+            else if (renderMode == RenderMode.RenderAll){
+                RotateTransform transform = new RotateTransform(secondDegrees, second_hand_image.Width / 2, second_hand_image.Height - CONSTANTS.SECOND_HAND_OFFSET);
+                second_hand_image.RenderTransform = transform;
 
-                transform = new RotateTransform(minuteDegrees, minImage.Width / 2, minImage.Height / 2);
-                minImage.RenderTransform = transform;
+                transform = new RotateTransform(minuteDegrees, minute_hand_image.Width / 2, minute_hand_image.Height);
+                minute_hand_image.RenderTransform = transform;
 
-                transform = new RotateTransform(hourDegrees, hrImage.Width / 2, hrImage.Height / 2);
-                hrImage.RenderTransform = transform;
+                transform = new RotateTransform(hourDegrees, hour_hand_image.Width / 2, hour_hand_image.Height);
+                hour_hand_image.RenderTransform = transform;
             }
             else throw new NotImplementedException("Unexpected analog clock render mode");
         }
 
         private void dTimer_Tick(object sender, EventArgs e)
         {
-            if (animateClock)
-            {
+            if (animateClock){
                 renderAngles(RenderMode.RenderSecond);
-                if (secondDegrees % CONSTANTS.DEG_PER_SEC == 0)
-                {
+                if (secondDegrees % CONSTANTS.DEG_PER_SEC == 0){
                     updateTime();
                     computeAngles();
                     renderAngles(RenderMode.RenderMinutes);
                     updateTimeLabel();
                 }
-                if (minuteDegrees % CONSTANTS.DEG_PER_HOUR == 0)
-                {
+                if (minuteDegrees % CONSTANTS.DEG_PER_HOUR == 0){
                     renderAngles(RenderMode.RenderHour);
                 }
             }
@@ -161,33 +164,23 @@ namespace SENG403
 
             string sec, min, hour;
             if (currSec < 10)
-            {
                 sec = "0" + currSec.ToString();
-            }
             else
                 sec = currSec.ToString();
             if (currMin < 10)
-            {
                 min = "0" + currMin.ToString();
-            }
             else
                 min = currMin.ToString();
             if (currHour < 10)
-            {
                 hour = "  " + currHour.ToString();
-            }
-            else hour = currHour.ToString();
-
+            else
+                hour = currHour.ToString();
             if (meridiem == "PM")
                 hour = (currHour + 12).ToString();
-
             if (currHour == 12 && currMin == 0 && currSec >= 0)
-            {
                 dateLabel.Content = GetDate();
-            }
-               
-
-            timeLabel.Content = hour + " : " + min + " : " + sec;
+            time_label.Content = hour + " : " + min + " : " + sec;
         }
     }
 }
+

@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.IO;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace SENG403
 {
@@ -27,10 +28,15 @@ namespace SENG403
     public partial class MainWindow : Window
     {
         System.Windows.Forms.NotifyIcon ni;
-        Time time;
         SoundModule sound = new SoundModule();         //base sound module to be copied into each alarm
                                                        // (each alarm gets their own instance which can be set accordingly)
+        ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();     //acquire the collection of timezones (from system)
+        string currentTimeZone = TimeZone.CurrentTimeZone.StandardName;     //standard name of the current timezone
+        int currentTimeZoneIndex = -1;                                      //an INDEX which points to an element in the timeZones collection
+
+
         AlarmHandler alarmHandler = new AlarmHandler();
+
         Double snoozeTime = 0;
         Boolean editVal = false;
         Alarm editedAlarm;
@@ -45,8 +51,6 @@ namespace SENG403
             CreateTrayIcon();
 
             this.KeyUp += MainWindow_KeyUp;
-            time = new Time(minute_hand_image, second_hand_image, hour_hand_image, time_label, date_label);
-            time.Start();
 
             // populate sounds comboBox with available .wav files in Sound directory
             string[] availableSounds = sound.getSounds();
@@ -57,7 +61,22 @@ namespace SENG403
 
             updateAlarmsList();
 
+            //populate the timezones combobox with all available timezones
+            //update the comboBox with the current timezone so that on startup it is not blank
+            for (int i = 0; i < timeZones.Count; i++)
+            {
+                //TODO uncomment comboBoxTimeZone.Items.Add(timeZones[i]);
+                string stdName = timeZones[i].StandardName;
+
+                if (stdName.Equals(currentTimeZone))
+                {
+                    //TODO uncomment comboBoxTimeZone.Text = timeZones[i].ToString();
+                    currentTimeZoneIndex = i;
+                }
+            }
+
             Alarm.onRing += onAlarmRing;
+
         }
 
         // Handle the missed alarm event
@@ -137,7 +156,7 @@ namespace SENG403
             {
                 this.Hide();
                 this.WindowState = WindowState.Minimized;
-                time.DisableAnimations();
+                ClockUC.DisableAnimations();
             }
         }
 
@@ -148,7 +167,7 @@ namespace SENG403
                 ni.Visible = false;
                 this.Show();
                 this.WindowState = WindowState.Maximized;
-                time.EnableAnimations();
+                ClockUC.EnableAnimations();
             }
         }
 
@@ -194,8 +213,8 @@ namespace SENG403
             }
             if (e.Key == Key.B)
             {
-                digital_canvas.Visibility = Visibility.Visible;
-                analog_canvas.Visibility = Visibility.Visible;
+                ClockUC.digital_canvas.Visibility = Visibility.Visible;
+                ClockUC.analog_canvas.Visibility = Visibility.Visible;
             }
         }
 
@@ -237,8 +256,8 @@ namespace SENG403
 
             String message = messageBox.Text;
             //TEMPRORARY/ROUGH to make functionality work:
-            DateTime theTime = new System.DateTime(System.DateTime.Now.Year, System.DateTime.Now.Month,
-                System.DateTime.Now.Day, theHour, theMinute, 0);
+            DateTime theTime = new System.DateTime(Clock.Now().Year, Clock.Now().Month,
+                Clock.Now().Day, theHour, theMinute, 0);
 
             // set the sound for the alarm being created (selected from comboBox)
             string selectedSound = comboBoxSounds.Text;
@@ -278,46 +297,25 @@ namespace SENG403
 
         //-------------------------------------------------------------radiobuttons
         // Selected the 1 minute snooze radio button for an alarm
-        private void select1Min(object sender, RoutedEventArgs e)
-        {
-            snoozeTime = 1;
-        }
+        private void select1Min(object sender, RoutedEventArgs e) { snoozeTime = 1; }
 
         // Selected the 2 minute snooze radio button for an alarm
-        private void select2Mins(object sender, RoutedEventArgs e)
-        {
-            snoozeTime = 2;
-        }
+        private void select2Mins(object sender, RoutedEventArgs e) { snoozeTime = 2; }
 
         // Selected the 5 minute snooze radio button for an alarm
-        private void select5Mins(object sender, RoutedEventArgs e)
-        {
-            snoozeTime = 5;
-        }
+        private void select5Mins(object sender, RoutedEventArgs e) { snoozeTime = 5; }
 
         // Selected the 10 minute snooze radio button for an alarm
-        private void select10Mins(object sender, RoutedEventArgs e)
-        {
-            snoozeTime = 10;
-        }
+        private void select10Mins(object sender, RoutedEventArgs e) { snoozeTime = 10; }
 
         // Selected the 15 minute snooze radio button for an alarm
-        private void select15Mins(object sender, RoutedEventArgs e)
-        {
-            snoozeTime = 15;
-        }
+        private void select15Mins(object sender, RoutedEventArgs e) { snoozeTime = 15; }
 
         // Selected the 30 minute snooze radio button for an alarm
-        private void select30Mins(object sender, RoutedEventArgs e)
-        {
-            snoozeTime = 30;
-        }
+        private void select30Mins(object sender, RoutedEventArgs e) { snoozeTime = 30; }
 
         // Selected the 60 minute snooze radio button for an alarm
-        private void select60Mins(object sender, RoutedEventArgs e)
-        {
-            snoozeTime = 60;
-        }
+        private void select60Mins(object sender, RoutedEventArgs e) { snoozeTime = 60; }
         //-------------------------------------------------------------end radiobuttons
         //=================================================================== end alarm set screen
 
@@ -356,17 +354,17 @@ namespace SENG403
         // when clicked, if state is analog, switch to digital. Else switch to analog.
         private void displayModeToggle(object sender, RoutedEventArgs e)
         {
-            if (analog_canvas.IsVisible)
+            if (ClockUC.analog_canvas.IsVisible)
             {
                 toggleDisplayButton.Content = "Analog";
-                analog_canvas.Visibility = Visibility.Hidden;
-                digital_canvas.Visibility = Visibility.Visible;
+                ClockUC.analog_canvas.Visibility = Visibility.Hidden;
+                ClockUC.digital_canvas.Visibility = Visibility.Visible;
             }
             else
             {
                 toggleDisplayButton.Content = "Digital";
-                analog_canvas.Visibility = Visibility.Visible;
-                digital_canvas.Visibility = Visibility.Hidden;
+                ClockUC.analog_canvas.Visibility = Visibility.Visible;
+                ClockUC.digital_canvas.Visibility = Visibility.Hidden;
             }
         }
 
@@ -483,6 +481,27 @@ namespace SENG403
             // Show the screen that says missed alarm
             missedAlarmNotification.Visibility = Visibility.Hidden;
             dismissButton.Visibility = Visibility.Hidden;
+        }
+        /// <summary>
+        /// Listener for when the time zone combobox is closed (hence a time zone is selected)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dropDownClosed(object sender, EventArgs e)
+        {
+            //if time zone selection is different, update the time and the current time zone
+            //TODO uncomment if (!comboBoxTimeZone.SelectedItem.Equals(timeZones[currentTimeZoneIndex]))
+            //{
+            //    currentTimeZoneIndex = comboBoxTimeZone.SelectedIndex;
+            //    Console.WriteLine("-NEW SELECTION, index = "+currentTimeZoneIndex);
+            //    currentTimeZone = timeZones[currentTimeZoneIndex].StandardName;
+            //    //time.HourOffset = timeZones[currentTimeZones]
+                
+            //}
+            //Console.WriteLine("currentTimeZone: "+currentTimeZone);
+            //Console.WriteLine("timeZones[currentTimeZoneIndex]: " + timeZones[currentTimeZoneIndex]);
+            //Console.WriteLine("selectedItem: "+comboBoxTimeZone.SelectedItem);
+
         }
     }
 }

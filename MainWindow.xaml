@@ -8,17 +8,8 @@
         mc:Ignorable="d"
         Title="Clock" Height="1080" Width="1920" WindowStyle="None" ResizeMode="NoResize" WindowState="Maximized">
     <Canvas Background="#FF141734">
-        <Canvas x:Name="time_canvas" Height="800" Width="800" Canvas.Left="310" Canvas.Top="100" >
-            <Canvas x:Name="digital_canvas" Visibility="Hidden">
-                <Label x:Name="time_label" Content="00 : 00 : 00" Width="800" Height="800" FontSize="130"
-               VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Microsoft JhengHei UI"/>
-            </Canvas>
-            <Canvas x:Name="analog_canvas">
-                <Image x:Name="clock_canvas_image" Height="800" Width="800" Source="pack://application:,,,/Resource/clock_canvas.png"/>
-                <Image x:Name="hour_hand_image" Height="800" Width="800" Source="pack://application:,,,/Resource/hour_hand.png"/>
-                <Image x:Name="minute_hand_image" Height="800" Width="800" Source="pack://application:,,,/Resource/minute_hand.png"/>
-                <Image x:Name="second_hand_image" Height="800" Width="800" Source="pack://application:,,,/Resource/second_hand.png"/>
-            </Canvas>
+        <Canvas x:Name="time_canvas" Height="834" Width="834" Canvas.Left="310" Canvas.Top="100" >
+            <local:Clock x:Name="ClockUC"/>
         </Canvas>
         <Canvas x:Name="canvasTimeDisplaySidebar" Height="1080" Canvas.Left="1420" Width="500" Background="#FF443939">
 
