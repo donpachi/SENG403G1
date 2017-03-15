@@ -32,6 +32,8 @@ namespace SENG403
                                                        // (each alarm gets their own instance which can be set accordingly)
         AlarmHandler alarmHandler = new AlarmHandler();
         Double snoozeTime = 0;
+        Boolean editVal = false;
+        Alarm editedAlarm;
 
 
         public MainWindow()
@@ -246,9 +248,15 @@ namespace SENG403
             // create new alarm object
             alarmHandler.setNewAlarm(theTime, alarmDaysChecked, newSound, message);
 
+            if (editVal == true)
+            {
+                alarmHandler.deleteAlarm(editedAlarm);
+                editVal = false;
+            }
             //update the UI with all alarms in the alarm arraylist
             updateAlarmsList();
 
+            resetAlarmPanel();
             canvasAlarmSet.Visibility = Visibility.Hidden;
             alarmList.Visibility = Visibility.Visible;
             buttonSetAlarm.Visibility = Visibility.Visible;
@@ -260,6 +268,7 @@ namespace SENG403
 
         private void clickButtonCancel(object sender, RoutedEventArgs e)
         {
+            resetAlarmPanel();
             canvasAlarmSet.Visibility = Visibility.Hidden;
             alarmList.Visibility = Visibility.Visible;
             time_canvas.Visibility = Visibility.Visible;
@@ -411,6 +420,61 @@ namespace SENG403
                     }
                 }
             }
+        }
+
+        private void editClick(object sender, RoutedEventArgs e)
+        {
+            alarmList.Visibility = Visibility.Hidden;
+            buttonEditAlarm.Visibility = Visibility.Hidden;
+            buttonDeleteAlarm.Visibility = Visibility.Hidden;
+            buttonSetAlarm.Visibility = Visibility.Hidden;
+            canvasAlarmSet.Visibility = Visibility.Visible;
+            editVal = true;
+            Alarm alarm;
+            String dates;
+            string selectedAlarm = alarmList.SelectedItem.ToString();
+            if (selectedAlarm == null) { return; }
+            else
+            {
+                for (int n = 1; n <= alarmHandler.getAlarms().Length; n++)
+                {
+                    if (selectedAlarm.Contains("Alarm " + n))
+                    {
+                        alarm = alarmHandler.getAlarms()[n - 1];
+                        editedAlarm = alarm;
+                        messageBox.Text = alarm.getMessage();
+                        textBoxHourEntry.Text = alarm.getHour().ToString();
+                        textBoxMinuteEntry.Text = alarm.getMinute().ToString();
+                        dates = alarm.getDays();
+                        if (dates != "0000000")
+                        {
+                            if (dates[0] == '1') { checkBox_Sunday.IsChecked = true; }
+                            if (dates[1] == '1') { checkBox_Monday.IsChecked = true; }
+                            if (dates[2] == '1') { checkBox_Tuesday.IsChecked = true; }
+                            if (dates[3] == '1') { checkBox_Wednesday.IsChecked = true; }
+                            if (dates[4] == '1') { checkBox_Thursday.IsChecked = true; }
+                            if (dates[5] == '1') { checkBox_Friday.IsChecked = true; }
+                            if (dates[6] == '1') { checkBox_Saturday.IsChecked = true; }
+                        }
+                        comboBoxSounds.SelectedItem = alarm.getSound();
+                    }
+                }
+            }
+        }
+
+        private void resetAlarmPanel()
+        {
+            messageBox.Text = "No Message Set";
+            textBoxHourEntry.Text = "";
+            textBoxMinuteEntry.Text = "";
+            checkBox_Sunday.IsChecked = false;
+            checkBox_Monday.IsChecked = false;
+            checkBox_Tuesday.IsChecked = false;
+            checkBox_Wednesday.IsChecked = false;
+            checkBox_Thursday.IsChecked = false;
+            checkBox_Friday.IsChecked = false;
+            checkBox_Saturday.IsChecked = false;
+            comboBoxSounds.SelectedIndex = 0;
         }
     }
 }
