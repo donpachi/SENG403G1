@@ -38,6 +38,9 @@ namespace SENG403
 
         public MainWindow()
         {
+
+            MissedAlarmHandler.MissedAlarm += handleMissedAlarm;
+
             InitializeComponent();
             CreateTrayIcon();
 
@@ -55,6 +58,19 @@ namespace SENG403
             updateAlarmsList();
 
             Alarm.onRing += onAlarmRing;
+        }
+
+        // Handle the missed alarm event
+        // Add 'async' before void if we want to implement notification screen disappearing after X seconds
+        private async void handleMissedAlarm(object sender, EventArgs e)
+        {
+            // Show the screen that says missed alarm
+            missedAlarmNotification.Visibility = Visibility.Visible;
+
+            // Wait 5 seconds and then hide the screen
+            await Task.Delay(5000);
+            missedAlarmNotification.Visibility = Visibility.Hidden;
+
         }
 
         /// <summary>
@@ -185,6 +201,9 @@ namespace SENG403
         // Get all set values on the interface and send them to the alarm class to make an alarm
         private void clickButtonConfirm(object sender, RoutedEventArgs e)
         {
+
+            SoundModule newSound = new SoundModule();
+
             // convert the hour and minute entries to integers so that they may be used for
             // the alarm's DateTime
             int theHour = Convert.ToInt32(textBoxHourEntry.Text);
@@ -222,12 +241,12 @@ namespace SENG403
 
             // set the sound for the alarm being created (selected from comboBox)
             string selectedSound = comboBoxSounds.Text;
-            sound.setSound(selectedSound);
+            newSound.setSound(selectedSound);
 
             //TODO: need to pass in snooze time
 
             // create new alarm object
-            alarmHandler.setNewAlarm(theTime, alarmDaysChecked, sound, message);
+            alarmHandler.setNewAlarm(theTime, alarmDaysChecked, newSound, message);
 
             if (editVal == true)
             {
@@ -308,6 +327,7 @@ namespace SENG403
         private void clickSnooze(object sender, RoutedEventArgs e)
         {
             alarmHandler.getCurrentAlarm().snooze(snoozeTime);
+            alarmHandler.currentAlarm = null;
             textBlock.Visibility = Visibility.Hidden;
             buttonDismissAlarm.Visibility = Visibility.Hidden;
             buttonSnoozeAlarm.Visibility = Visibility.Hidden;
@@ -323,6 +343,7 @@ namespace SENG403
             buttonDismissAlarm.Visibility = Visibility.Hidden;
             buttonSnoozeAlarm.Visibility = Visibility.Hidden;
             alarmHandler.endAlarm(ringingAlarm);
+            alarmHandler.currentAlarm = null;
             updateAlarmsList();
         }
         //=================================================================== end active alarm screen listeners
