@@ -21,10 +21,13 @@ namespace SENG403
         public const double DEG_PER_HOUR = 30;
         public const double SEC_IN_MIN = 60;
         public const double MIN_IN_HR = 60;
+        public const int SECOND_HAND_OFFSET = 41;
     }
 
-    public partial class Time
+    public class Time
     {
+        private static double hourOffset = 0;
+        public double HourOffset { get { return hourOffset; } set { hourOffset = value; } }
         public double degreeInterval;
         DispatcherTimer dTimer;
         private double secondDegrees, minuteDegrees, hourDegrees;
@@ -73,6 +76,15 @@ namespace SENG403
             animateClock = true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime Now()
+        {
+            return DateTime.Now.AddHours(hourOffset);
+        }
+
 
         private void updateTime()
         {
@@ -85,7 +97,7 @@ namespace SENG403
             timestring = dateTimeElements[1];
             meridiem = dateTimeElements[2];
             string[] timeElements = dateTimeElements[1].Split(':');
-            currHour = Convert.ToDouble(timeElements[0]);
+            currHour = hourOffset + Convert.ToDouble(timeElements[0]);               //add UTC offset from time zone
             currMin = Convert.ToDouble(timeElements[1]);
             currSec = Convert.ToDouble(timeElements[2]);
         }
@@ -108,30 +120,30 @@ namespace SENG403
 
             if (renderMode == RenderMode.RenderSecond)
             {
-                RotateTransform transform = new RotateTransform(secondDegrees, secImage.Width / 2, secImage.Height / 2);
+                RotateTransform transform = new RotateTransform(secondDegrees, secImage.Width / 2, secImage.Height - CONSTANTS.SECOND_HAND_OFFSET);
                 secondDegrees = (secondDegrees + degreeInterval) >= 360 ? 0 : secondDegrees + degreeInterval;
                 secImage.RenderTransform = transform;
             }
 
             else if (renderMode == RenderMode.RenderMinutes)
             {
-                RotateTransform transform = new RotateTransform(minuteDegrees, minImage.Width / 2, minImage.Height / 2);
+                RotateTransform transform = new RotateTransform(minuteDegrees, minImage.Width / 2, minImage.Height);
                 minImage.RenderTransform = transform;
             }
             else if (renderMode == RenderMode.RenderHour)
             {
-                RotateTransform transform = new RotateTransform(hourDegrees, hrImage.Width / 2, hrImage.Height / 2);
+                RotateTransform transform = new RotateTransform(hourDegrees, hrImage.Width / 2, hrImage.Height);
                 hrImage.RenderTransform = transform;
             }
             else if (renderMode == RenderMode.RenderAll)
             {
-                RotateTransform transform = new RotateTransform(secondDegrees, secImage.Width / 2, secImage.Height / 2);
+                RotateTransform transform = new RotateTransform(secondDegrees, secImage.Width / 2, secImage.Height - CONSTANTS.SECOND_HAND_OFFSET);
                 secImage.RenderTransform = transform;
 
-                transform = new RotateTransform(minuteDegrees, minImage.Width / 2, minImage.Height / 2);
+                transform = new RotateTransform(minuteDegrees, minImage.Width / 2, minImage.Height);
                 minImage.RenderTransform = transform;
 
-                transform = new RotateTransform(hourDegrees, hrImage.Width / 2, hrImage.Height / 2);
+                transform = new RotateTransform(hourDegrees, hrImage.Width / 2, hrImage.Height);
                 hrImage.RenderTransform = transform;
             }
             else throw new NotImplementedException("Unexpected analog clock render mode");
