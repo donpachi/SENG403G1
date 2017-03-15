@@ -60,14 +60,14 @@ namespace SENG403
 
         // Handle the missed alarm event
         // Add 'async' before void if we want to implement notification screen disappearing after X seconds
-        private void handleMissedAlarm(object sender, EventArgs e)
+        private async void handleMissedAlarm(object sender, EventArgs e)
         {
             // Show the screen that says missed alarm
             missedAlarmNotification.Visibility = Visibility.Visible;
 
             // Wait 5 seconds and then hide the screen
-            //await Task.Delay(5000);
-            //missedAlarmNotification.Visibility = Visibility.Hidden;
+            await Task.Delay(5000);
+            missedAlarmNotification.Visibility = Visibility.Hidden;
 
         }
 
@@ -199,6 +199,9 @@ namespace SENG403
         // Get all set values on the interface and send them to the alarm class to make an alarm
         private void clickButtonConfirm(object sender, RoutedEventArgs e)
         {
+
+            SoundModule newSound = new SoundModule();
+
             // convert the hour and minute entries to integers so that they may be used for
             // the alarm's DateTime
             int theHour = Convert.ToInt32(textBoxHourEntry.Text);
@@ -236,12 +239,12 @@ namespace SENG403
 
             // set the sound for the alarm being created (selected from comboBox)
             string selectedSound = comboBoxSounds.Text;
-            sound.setSound(selectedSound);
+            newSound.setSound(selectedSound);
 
             //TODO: need to pass in snooze time
 
             // create new alarm object
-            alarmHandler.setNewAlarm(theTime, alarmDaysChecked, sound, message);
+            alarmHandler.setNewAlarm(theTime, alarmDaysChecked, newSound, message);
 
             //update the UI with all alarms in the alarm arraylist
             updateAlarmsList();

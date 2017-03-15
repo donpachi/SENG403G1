@@ -180,10 +180,10 @@ namespace SENG403
                 {
                     if (alarm.getDays() == "0000000" || alarm.getDays()[day].Equals('1'))
                     {
-
                         if (currentAlarm != null)
                         {
                             MissedAlarmHandler.triggerMissedAlarmEvent(this, new MissedAlarmEventArgs());
+                            currentAlarm.setRinging(false);
                         }
 
                         // Play the alarm and set the current alarm to this alarm
