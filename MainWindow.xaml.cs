@@ -49,8 +49,8 @@ namespace SENG403
             CreateTrayIcon();
 
             this.KeyUp += MainWindow_KeyUp;
-            time = new Time(minute_hand_image, second_hand_image, hour_hand_image, time_label, date_label);
-            time.Start();
+            //time = new Time(minute_hand_image, secondHand.getSecondHandImg(), hour_hand_image, time_label, date_label);
+            //time.Start();
 
             // populate sounds comboBox with available .wav files in Sound directory
             string[] availableSounds = sound.getSounds();

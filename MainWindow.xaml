@@ -14,11 +14,7 @@
                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Microsoft JhengHei UI"/>
             </Canvas>
             <Canvas x:Name="analog_canvas">
-                <Image x:Name="clock_canvas_image" Height="834" Width="834" Source="pack://application:,,,/Resource/clock_canvas.png"/>
-                <Image x:Name="hour_hand_image" Height="192" Canvas.Left="411" Canvas.Top="225" Width="11" Source="pack://application:,,,/Resource/hour_hand.png"/>
-                <Image x:Name="minute_hand_image" Height="297" Canvas.Left="411" Canvas.Top="120" Width="11" Source="pack://application:,,,/Resource/minute_hand.png"/>
-                <Image x:Name="second_hand_image" Height="438" Canvas.Left="414.5" Canvas.Top="20" Width="5" Source="pack://application:,,,/Resource/second_hand.png"/>
-                <Image x:Name="center_pin_image" Height="26" Canvas.Left="404" Canvas.Top="404" Width="26" Source="pack://application:,,,/Resource/center_pin.png"/>
+                <local:Clock/>
             </Canvas>
         </Canvas>
         <Canvas x:Name="canvasTimeDisplaySidebar" Height="1080" Canvas.Left="1420" Width="500" Background="#FF443939">
