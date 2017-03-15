@@ -63,6 +63,16 @@ namespace SENG403.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap center_pin {
+            get {
+                object obj = ResourceManager.GetObject("center_pin", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap clock_canvas {
             get {
                 object obj = ResourceManager.GetObject("clock_canvas", resourceCulture);
