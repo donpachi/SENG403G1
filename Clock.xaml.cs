@@ -106,6 +106,7 @@ namespace SENG403
         private void OnTimeZoneChange(double offset)
         {
             hourOffset = offset;
+            minuteOffset = 0;
             updateTime();
             updateTimeLabel();
             synchronizeHands();
