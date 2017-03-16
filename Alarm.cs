@@ -260,15 +260,15 @@ namespace SENG403
         String message;
         SoundModule alarmSound;
 
-        public delegate void alarmEvent();
-        public static event alarmEvent onRing;
+        public delegate void AlarmEvent();
+        public static event AlarmEvent onRing;
 
         /// <summary>
         /// Return whether the alarm is ringing
         /// </summary>
         public void AlarmRinging()
         {
-            if (onRing != null)
+            //if (onRing != null)
                 onRing();
         }
 

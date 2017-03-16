@@ -21,7 +21,6 @@ using System.Collections.ObjectModel;
 
 namespace SENG403
 {
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -33,25 +32,23 @@ namespace SENG403
         ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();     //acquire the collection of timezones (from system)
         string currentTimeZone = TimeZone.CurrentTimeZone.StandardName;     //standard name of the current timezone
         int currentTimeZoneIndex = -1;                                      //an INDEX which points to an element in the timeZones collection
+
         string nativeTimeZone = TimeZone.CurrentTimeZone.StandardName;      //keep this unchanged for reference
         int nativeTimeZoneIndex = -1;
         bool nativeInDSaving = false;
-        bool tZoneSwitchedOnce = false;
 
         AlarmHandler alarmHandler = new AlarmHandler();
-
         Double snoozeTime = 0;
         Boolean editVal = false;
         Alarm editedAlarm;
 
-
         public MainWindow()
         {
-
             MissedAlarmHandler.MissedAlarm += handleMissedAlarm;
 
             InitializeComponent();
             CreateTrayIcon();
+            date_label.Content = Clock.GetDate().Replace(',', ' ');
 
             this.KeyUp += MainWindow_KeyUp;
 
@@ -83,7 +80,8 @@ namespace SENG403
             //boolean flag to see if native time zone is currently in daylight saving time
             nativeInDSaving = timeZones[nativeTimeZoneIndex].IsDaylightSavingTime(Clock.Now());
 
-            Alarm.onRing += onAlarmRing;
+            Alarm.onRing += OnAlarmRing;
+            Clock.UpdateTime += UpdateTimeLabel;
         }
 
         // Handle the missed alarm event
@@ -153,7 +151,6 @@ namespace SENG403
         //event method to trigger when the window changes states
         protected override void OnStateChanged(EventArgs e)
         {
-
             base.OnStateChanged(e);
         }
 
@@ -171,7 +168,6 @@ namespace SENG403
         {
             if (this.WindowState == WindowState.Minimized)
             {
-                ni.Visible = false;
                 this.Show();
                 this.WindowState = WindowState.Maximized;
                 ClockUC.EnableAnimations();
@@ -188,7 +184,7 @@ namespace SENG403
         }
 
 
-        public void onAlarmRing()
+        private void OnAlarmRing()
         {
             MaximizeWindow();
             Console.WriteLine("ring");
@@ -198,18 +194,22 @@ namespace SENG403
             buttonSnoozeAlarm.Visibility = Visibility.Visible;
         }
 
+        private void UpdateTimeLabel(object sender, String args)
+        {
+            date_label.Content = args.Replace(',', ' ');
+        }
+
         private void CreateTrayIcon()
         {
             ni = new System.Windows.Forms.NotifyIcon();
-            ni.Icon = new System.Drawing.Icon("Resource/Main.ico");
+            ni.Icon = new Icon("Resource/Main.ico");
             ni.Visible = true;
-            ni.DoubleClick +=
-                delegate (object sender, EventArgs args)
-                {
-                    this.Show();
-                    MaximizeWindow();
-                };
-
+            ni.DoubleClick += (s, a) =>
+            {
+                this.Show();
+                MaximizeWindow();
+            };
+            ni.Text = "Alarm Clock";
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
@@ -232,63 +232,78 @@ namespace SENG403
 
             // convert the hour and minute entries to integers so that they may be used for
             // the alarm's DateTime
-            int theHour = Convert.ToInt32(textBoxHourEntry.Text);
-            int theMinute = Convert.ToInt32(textBoxMinuteEntry.Text);
-
-            // string which holds 0 or 1 for each day of the week (Sunday = 0th, Monday = 1th, ..., Saturday = 6th)
-            string alarmDaysChecked = "";
-
-            // Build days string before creating alarm
-            if (checkBox_Sunday.IsChecked == true) { alarmDaysChecked += "1"; }
-            else { alarmDaysChecked += "0"; }
-
-            if (checkBox_Monday.IsChecked == true) { alarmDaysChecked += "1"; }
-            else { alarmDaysChecked += "0"; }
-
-            if (checkBox_Tuesday.IsChecked == true) { alarmDaysChecked += "1"; }
-            else { alarmDaysChecked += "0"; }
-
-            if (checkBox_Wednesday.IsChecked == true) { alarmDaysChecked += "1"; }
-            else { alarmDaysChecked += "0"; }
-
-            if (checkBox_Thursday.IsChecked == true) { alarmDaysChecked += "1"; }
-            else { alarmDaysChecked += "0"; }
-
-            if (checkBox_Friday.IsChecked == true) { alarmDaysChecked += "1"; }
-            else { alarmDaysChecked += "0"; }
-
-            if (checkBox_Saturday.IsChecked == true) { alarmDaysChecked += "1"; }
-            else { alarmDaysChecked += "0"; }
-
-            String message = messageBox.Text;
-            //TEMPORARY/ROUGH to make functionality work:
-            DateTime theTime = new System.DateTime(Clock.Now().Year, Clock.Now().Month,
-                Clock.Now().Day, theHour, theMinute, 0);
-
-            // set the sound for the alarm being created (selected from comboBox)
-            string selectedSound = comboBoxSounds.Text;
-            newSound.setSound(selectedSound);
-
-            //TODO: need to pass in snooze time
-
-            // create new alarm object
-            alarmHandler.setNewAlarm(theTime, alarmDaysChecked, newSound, message);
-
-            if (editVal == true)
+            if (textBoxHourEntry.Text != "" && textBoxMinuteEntry.Text != "")
             {
-                alarmHandler.deleteAlarm(editedAlarm);
-                editVal = false;
+                int theHour = Convert.ToInt32(textBoxHourEntry.Text);
+                int theMinute = Convert.ToInt32(textBoxMinuteEntry.Text);
+
+                // string which holds 0 or 1 for each day of the week (Sunday = 0th, Monday = 1th, ..., Saturday = 6th)
+                string alarmDaysChecked = "";
+
+                // Build days string before creating alarm
+                if (checkBox_Sunday.IsChecked == true) { alarmDaysChecked += "1"; }
+                else { alarmDaysChecked += "0"; }
+
+                if (checkBox_Monday.IsChecked == true) { alarmDaysChecked += "1"; }
+                else { alarmDaysChecked += "0"; }
+
+                if (checkBox_Tuesday.IsChecked == true) { alarmDaysChecked += "1"; }
+                else { alarmDaysChecked += "0"; }
+
+                if (checkBox_Wednesday.IsChecked == true) { alarmDaysChecked += "1"; }
+                else { alarmDaysChecked += "0"; }
+
+                if (checkBox_Thursday.IsChecked == true) { alarmDaysChecked += "1"; }
+                else { alarmDaysChecked += "0"; }
+
+                if (checkBox_Friday.IsChecked == true) { alarmDaysChecked += "1"; }
+                else { alarmDaysChecked += "0"; }
+
+                if (checkBox_Saturday.IsChecked == true) { alarmDaysChecked += "1"; }
+                else { alarmDaysChecked += "0"; }
+
+                String message = messageBox.Text;
+                //TEMPORARY/ROUGH to make functionality work:
+                DateTime theTime = new System.DateTime(Clock.Now().Year, Clock.Now().Month,
+                    Clock.Now().Day, theHour, theMinute, 0);
+
+                // set the sound for the alarm being created (selected from comboBox)
+                string selectedSound = comboBoxSounds.Text;
+                newSound.setSound(selectedSound);
+
+                //TODO: need to pass in snooze time
+
+                // create new alarm object
+                alarmHandler.setNewAlarm(theTime, alarmDaysChecked, newSound, message);
+
+                if (editVal == true)
+                {
+                    alarmHandler.deleteAlarm(editedAlarm);
+                    editVal = false;
+                }
+                //update the UI with all alarms in the alarm arraylist
+                updateAlarmsList();
             }
-            //update the UI with all alarms in the alarm arraylist
-            updateAlarmsList();
 
             resetAlarmPanel();
+
+            if (alarmHandler.alarmList.Count != 0)
+            {
+                buttonEditAlarm.Visibility = Visibility.Visible;
+                buttonDeleteAlarm.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                buttonEditAlarm.Visibility = Visibility.Hidden;
+                buttonDeleteAlarm.Visibility = Visibility.Hidden;
+            }
             canvasAlarmSet.Visibility = Visibility.Hidden;
             alarmList.Visibility = Visibility.Visible;
             buttonSetAlarm.Visibility = Visibility.Visible;
             buttonEditAlarm.Visibility = Visibility.Visible;
             buttonDeleteAlarm.Visibility = Visibility.Visible;
             comboBoxTimeZone.Visibility = Visibility.Visible;
+
         }
 
         private void clickButtonCancel(object sender, RoutedEventArgs e)
@@ -382,8 +397,11 @@ namespace SENG403
             buttonEditAlarm.Visibility = Visibility.Hidden;
             buttonDeleteAlarm.Visibility = Visibility.Hidden;
             buttonSetAlarm.Visibility = Visibility.Hidden;
+            comboBoxTimeZone.Visibility = Visibility.Hidden;
             canvasAlarmSet.Visibility = Visibility.Visible;
             comboBoxTimeZone.Visibility = Visibility.Hidden;
+            buttonConfirmAlarm.IsEnabled = false;
+
         }
 
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -434,6 +452,7 @@ namespace SENG403
             buttonEditAlarm.Visibility = Visibility.Hidden;
             buttonDeleteAlarm.Visibility = Visibility.Hidden;
             buttonSetAlarm.Visibility = Visibility.Hidden;
+            comboBoxTimeZone.Visibility = Visibility.Hidden;
             canvasAlarmSet.Visibility = Visibility.Visible;
             comboBoxTimeZone.Visibility = Visibility.Hidden;
             editVal = true;
@@ -497,6 +516,19 @@ namespace SENG403
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        public delegate void TimeZoneChangeEvent(double offset);
+        public static event TimeZoneChangeEvent OnTimeZoneChange;
+        private void TimeZoneChanged(double offset)
+        {
+            OnTimeZoneChange(offset);
+        }
+
+        //TODO Austin, tips for your bug
+        ///Austin - There's no need to calculate the old offset, the clock class automatically takes care of offsets through the DateTime structure.
+        ///all you need to do is calculate the offset of the selected timezone index from the current system timezone, not the last selected timezone.
+        ///This is where your bug lies.     -Aaron
+        ///
+        //I think this is good now? -Austin
         private void dropDownClosed(object sender, EventArgs e)
         {
             //if time zone selection is different, update the time and the current time zone
@@ -519,14 +551,60 @@ namespace SENG403
                     int t_native = timeZones[nativeTimeZoneIndex].BaseUtcOffset.Hours;
                     newOffset = (t_native - t) * -1;
                 }
-                
-                //subtract an hour onto the offset if daylight saving time is in effect
+
+                //subtract an hour off of the offset if daylight saving time is in effect
                 if (nativeInDSaving)
                 {
                     newOffset -= 1;
                 }
 
                 ClockUC.HourOffset = newOffset;
+                TimeZoneChanged(newOffset); //changed this to event so the clock can update the hands itself
+            }
+            /*
+            Console.WriteLine("currentTimeZone: "+currentTimeZone);
+            Console.WriteLine("timeZones[currentTimeZoneIndex]: " + timeZones[currentTimeZoneIndex]);
+            Console.WriteLine("selectedItem: "+comboBoxTimeZone.SelectedItem);
+            */
+
+        }
+
+
+        private void HourEntryLostFocus(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                short min = Convert.ToInt16(textBoxMinuteEntry.Text);
+                short hour = Convert.ToInt16(textBoxHourEntry.Text);
+                if ((min < 60 && min >= 0) && (hour <= 12 && hour >= 0))
+                    buttonConfirmAlarm.IsEnabled = true;
+            }
+            catch (InvalidCastException)
+            {
+                buttonConfirmAlarm.IsEnabled = false;
+            }
+            catch (FormatException)
+            {
+                buttonConfirmAlarm.IsEnabled = false;
+            }
+        }
+
+        private void MinuteEntryLostFocus(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                short min = Convert.ToInt16(textBoxMinuteEntry.Text);
+                short hour = Convert.ToInt16(textBoxHourEntry.Text);
+                if ((min < 60 && min >= 0) && (hour <= 23 && hour >= 0))
+                    buttonConfirmAlarm.IsEnabled = true;
+            }
+            catch (InvalidCastException)
+            {
+                buttonConfirmAlarm.IsEnabled = false;
+            }
+            catch (FormatException)
+            {
+                buttonConfirmAlarm.IsEnabled = false;
             }
         }
     }
