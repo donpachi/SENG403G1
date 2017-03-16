@@ -35,6 +35,8 @@ namespace SENG403
         int currentTimeZoneIndex = -1;                                      //an INDEX which points to an element in the timeZones collection
         string nativeTimeZone = TimeZone.CurrentTimeZone.StandardName;      //keep this unchanged for reference
         int nativeTimeZoneIndex = -1;
+        bool nativeInDSaving = false;
+        bool tZoneSwitchedOnce = false;
 
         AlarmHandler alarmHandler = new AlarmHandler();
 
@@ -78,6 +80,8 @@ namespace SENG403
                 }
             }
 
+            //boolean flag to see if native time zone is currently in daylight saving time
+            nativeInDSaving = timeZones[nativeTimeZoneIndex].IsDaylightSavingTime(Clock.Now());
 
             Alarm.onRing += onAlarmRing;
         }
@@ -502,20 +506,27 @@ namespace SENG403
                 currentTimeZone = timeZones[currentTimeZoneIndex].StandardName;
 
                 int newOffset;
-                if (currentTimeZone.Equals(nativeTimeZone)) { newOffset = 0; }
+                //if the currently selected time zone has the same offset as the native time zone
+                if (timeZones[currentTimeZoneIndex].BaseUtcOffset.Hours == timeZones[nativeTimeZoneIndex].BaseUtcOffset.Hours)
+                {
+                    newOffset = 0;
+                    if (nativeInDSaving)
+                        newOffset += 1;
+                }
                 else
                 {
-                    TimeSpan offset = timeZones[currentTimeZoneIndex].BaseUtcOffset;
-                    int t = offset.Hours;
-
-                    TimeSpan nativeOffset = timeZones[nativeTimeZoneIndex].BaseUtcOffset;
-                    int t_native = nativeOffset.Hours;
-
+                    int t = timeZones[currentTimeZoneIndex].BaseUtcOffset.Hours;
+                    int t_native = timeZones[nativeTimeZoneIndex].BaseUtcOffset.Hours;
                     newOffset = (t_native - t) * -1;
+                }
+                
+                //subtract an hour onto the offset if daylight saving time is in effect
+                if (nativeInDSaving)
+                {
+                    newOffset -= 1;
                 }
 
                 Clock.HourOffset = newOffset;
-                
             }
             /*
             Console.WriteLine("currentTimeZone: "+currentTimeZone);
