@@ -44,7 +44,8 @@ namespace SENG403
         private static Mutex mutex = new Mutex();
         private static double hourOffset = 0;
         public double HourOffset { get { return hourOffset; } set {hourOffset = value; } }
-        private double minuteOffset = 0;
+        private static double minuteOffset = 0;
+        public double MinuteOffset { get { return minuteOffset; } set { minuteOffset = value;} }
         public double degreeInterval;
         DispatcherTimer dTimer;
         private double secondDegrees, minuteDegrees, hourDegrees, requestedMinuteAngle, requestedHourAngle;
@@ -93,7 +94,7 @@ namespace SENG403
 
         public static DateTime Now()
         {
-            return DateTime.Now.AddHours(hourOffset);
+            return DateTime.Now.AddHours(hourOffset).AddMinutes(minuteOffset);
         }
         #endregion
 
@@ -133,7 +134,6 @@ namespace SENG403
             //    {
                     //TODO update time here
                     HourOffset = (int)(requestedHourAngle / CONSTANTS.DEG_PER_HOUR) - DateTime.Now.Hour;
-            Console.WriteLine("Houroffset: " + hourOffset);
                     second_hand_image.Visibility = Visibility.Visible;
                     digital_canvas.Visibility = Visibility.Hidden;
                     EnableAnimations();
@@ -186,7 +186,6 @@ namespace SENG403
             //TODO update time here
             minuteOffset = (int)(requestedMinuteAngle / CONSTANTS.DEG_PER_MIN) - DateTime.Now.Minute;
             HourOffset = slavedHour - DateTime.Now.Hour;
-            //Console.WriteLine("minoffset: " + minuteOffset);
             second_hand_image.Visibility = Visibility.Visible;
                     digital_canvas.Visibility = Visibility.Hidden;
                     EnableAnimations();
@@ -354,8 +353,10 @@ namespace SENG403
                 hour = "  " + currHour.ToString();
             else
                 hour = currHour.ToString();
-            if (meridiem == "PM")
+            if (meridiem == "PM" && (currHour + 12 < 24))
                 hour = (currHour + 12).ToString();
+            else if (meridiem == "AM" && currHour + 12 == 24)
+                hour = "00";
             if (currHour == 12 && currMin == 0 && currSec >= 0)
                 fireUpdateTime(GetDate());
             time_label.Content = hour + " . " + min + " . " + sec;
