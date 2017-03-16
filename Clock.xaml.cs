@@ -36,7 +36,7 @@ namespace SENG403
     public partial class Clock : UserControl
     {
         private static double hourOffset = 0;
-        public static double HourOffset { get { return hourOffset; } set {hourOffset = value; } }
+        public double HourOffset { get { return hourOffset; } set {hourOffset = value; } }
         public double degreeInterval;
         DispatcherTimer dTimer;
         private double secondDegrees, minuteDegrees, hourDegrees;

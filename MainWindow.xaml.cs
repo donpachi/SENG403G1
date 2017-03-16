@@ -526,12 +526,8 @@ namespace SENG403
                     newOffset -= 1;
                 }
 
-                Clock.HourOffset = newOffset;
+                ClockUC.HourOffset = newOffset;
             }
-            /*
-            Console.WriteLine("currentTimeZone: "+currentTimeZone);
-            Console.WriteLine("timeZones[currentTimeZoneIndex]: " + timeZones[currentTimeZoneIndex]);
-            Console.WriteLine("selectedItem: "+comboBoxTimeZone.SelectedItem);*/
         }
     }
 }
