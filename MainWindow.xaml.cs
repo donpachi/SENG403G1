@@ -458,8 +458,13 @@ namespace SENG403
             editVal = true;
             Alarm alarm;
             String dates;
-            string selectedAlarm = alarmList.SelectedItem.ToString();
-            if (selectedAlarm == null) { return; }
+            string selectedAlarm = "";
+
+            if(alarmList.SelectedItem != null)
+                selectedAlarm = alarmList.SelectedItem.ToString();
+            
+
+            if (selectedAlarm.Equals("")) { return; }
             else
             {
                 for (int n = 1; n <= alarmHandler.getAlarms().Length; n++)
