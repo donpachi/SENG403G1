@@ -224,7 +224,6 @@ namespace SENG403
         // Get all set values on the interface and send them to the alarm class to make an alarm
         private void clickButtonConfirm(object sender, RoutedEventArgs e)
         {
-
             SoundModule newSound = new SoundModule();
 
             // convert the hour and minute entries to integers so that they may be used for
@@ -285,8 +284,7 @@ namespace SENG403
             buttonSetAlarm.Visibility = Visibility.Visible;
             buttonEditAlarm.Visibility = Visibility.Visible;
             buttonDeleteAlarm.Visibility = Visibility.Visible;
-            // DEBUG - print out days checked to console
-            // System.Diagnostics.Debug.WriteLine("DAYS: "+alarmDaysChecked);
+            comboBoxTimeZone.Visibility = Visibility.Visible;
         }
 
         private void clickButtonCancel(object sender, RoutedEventArgs e)
@@ -296,6 +294,7 @@ namespace SENG403
             alarmList.Visibility = Visibility.Visible;
             time_canvas.Visibility = Visibility.Visible;
             buttonSetAlarm.Visibility = Visibility.Visible;
+            comboBoxTimeZone.Visibility = Visibility.Visible;
         }
 
         //-------------------------------------------------------------radiobuttons
@@ -380,6 +379,7 @@ namespace SENG403
             buttonDeleteAlarm.Visibility = Visibility.Hidden;
             buttonSetAlarm.Visibility = Visibility.Hidden;
             canvasAlarmSet.Visibility = Visibility.Visible;
+            comboBoxTimeZone.Visibility = Visibility.Hidden;
         }
 
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -431,6 +431,7 @@ namespace SENG403
             buttonDeleteAlarm.Visibility = Visibility.Hidden;
             buttonSetAlarm.Visibility = Visibility.Hidden;
             canvasAlarmSet.Visibility = Visibility.Visible;
+            comboBoxTimeZone.Visibility = Visibility.Hidden;
             editVal = true;
             Alarm alarm;
             String dates;
@@ -485,6 +486,8 @@ namespace SENG403
             missedAlarmNotification.Visibility = Visibility.Hidden;
             dismissButton.Visibility = Visibility.Hidden;
         }
+
+
         /// <summary>
         /// Listener for when the time zone combobox is closed (hence a time zone is selected)
         /// </summary>
