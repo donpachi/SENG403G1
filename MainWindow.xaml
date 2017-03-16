@@ -19,6 +19,7 @@
             </ListView>
             <Button x:Name="buttonEditAlarm" Content="Edit Alarm" Canvas.Left="196" Canvas.Bottom="150" Width="107" Height="56" Canvas.Top="594" Visibility="Hidden" Click="editClick"/>
             <Button x:Name="buttonDeleteAlarm" Content="Delete Alarm" Canvas.Left="196" Canvas.Bottom="150" Width="107" Height="56" Canvas.Top="672" Visibility="Hidden" Click="deleteClick"/>
+            <ComboBox x:Name="comboBoxTimeZone" Canvas.Left="36" Canvas.Top="820" Width="438" DropDownClosed="dropDownClosed"/>
         </Canvas>
 
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="Your message goes here" Height="221" Width="504" Canvas.Left="455" Canvas.Top="205" Foreground="#FF030303" Background="#FFDDDDDD" FontSize="24" TextAlignment="Center" Visibility="Hidden"/>
@@ -46,9 +47,9 @@
                 <RadioButton x:Name="radioButton_60mins" Content="60 Minutes" Foreground="White" Canvas.Top="119.76" Checked="select60Mins"/>
             </Canvas>
             <TextBox x:Name="textBoxHourEntry" Height="100" Canvas.Left="1561" TextWrapping="Wrap" Canvas.Top="408" Width="99" FontSize="48" MaxLength="2" TextAlignment="Center"
-                     VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                     VerticalContentAlignment="Center" HorizontalContentAlignment="Center" LostFocus="HourEntryLostFocus"/>
             <TextBox x:Name="textBoxMinuteEntry" Height="100" Canvas.Left="1690" TextWrapping="Wrap" Canvas.Top="408" Width="99" FontSize="48" MaxLength="2" TextAlignment="Center"
-                     VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                     VerticalContentAlignment="Center" HorizontalContentAlignment="Center" LostFocus="MinuteEntryLostFocus"/>
             <Label x:Name="labelDays" Content="Days" Canvas.Left="1561" Canvas.Top="604" Foreground="White" FontSize="16"/>
             <Label x:Name="labelSnooze" Content="Snooze" Canvas.Left="1664" Canvas.Top="604" Foreground="White" FontSize="16"/>
             <Label x:Name="labelColon" Content=":" Canvas.Left="1664" Canvas.Top="414" Foreground="White" FontSize="48"/>

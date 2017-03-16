@@ -28,6 +28,7 @@ namespace SENG403
         public const int MS_IN_SEC = 1000;
         public const double DEG_PER_SEC = 6;
         public const double DEG_PER_HOUR = 30;
+        public const double DEG_PER_MIN = 6;
         public const double SEC_IN_MIN = 60;
         public const double MIN_IN_HR = 60;
         public const int SECOND_HAND_OFFSET = 41;
@@ -42,11 +43,11 @@ namespace SENG403
         #region class variables
         private static Mutex mutex = new Mutex();
         private static double hourOffset = 0;
-        public double HourOffset { get { return hourOffset; } set {hourOffset = value; updateTime(); synchronizeHands(); } }
+        public static double HourOffset { get { return hourOffset; } set {hourOffset = value;} }
         private double minuteOffset = 0;
         public double degreeInterval;
         DispatcherTimer dTimer;
-        private double secondDegrees, minuteDegrees, hourDegrees;
+        private double secondDegrees, minuteDegrees, hourDegrees, requestedMinuteAngle, requestedHourAngle;
         private double currHour, currMin, currSec;
         private string date, timestring, meridiem;
         Boolean animateClock;
@@ -68,6 +69,8 @@ namespace SENG403
             updateTimeLabel();
             synchronizeHands();
             dTimer.Start();
+
+            MainWindow.OnTimeZoneChange += OnTimeZoneChange;
         }
 
         #region class-specific functions
@@ -100,33 +103,47 @@ namespace SENG403
             UpdateTime(this, arg);
         }
 
+        private void OnTimeZoneChange(double offset)
+        {
+            hourOffset = offset;
+            updateTime();
+            updateTimeLabel();
+            synchronizeHands();
+        }
+
         private void hourMouseEnter(object sender, MouseEventArgs e) { Mouse.OverrideCursor = Cursors.Hand; }
         private void hourMouseLeave(object sender, MouseEventArgs e) { Mouse.OverrideCursor = Cursors.Arrow; }
         private void hourMouseDown(object sender, MouseButtonEventArgs e)
         {
             hour_hand_image.CaptureMouse();
+            digital_canvas.Visibility = Visibility.Visible;
             second_hand_image.Visibility = Visibility.Hidden;
             DisableAnimations();
+            requestedHourAngle = hourDegrees;
         }
 
         private void hourMouseRelease(object sender, MouseButtonEventArgs e)
         {
             hour_hand_image.ReleaseMouseCapture();
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Tick += (o, i) =>
-            {
-                if (Mouse.LeftButton == MouseButtonState.Released && Mouse.RightButton == MouseButtonState.Released)
-                {
+            //DispatcherTimer timer = new DispatcherTimer();
+            //timer.Tick += (o, i) =>
+            //{
+            //    if (Mouse.LeftButton == MouseButtonState.Released && Mouse.RightButton == MouseButtonState.Released)
+            //    {
+                    //TODO update time here
+                    HourOffset = (int)(requestedHourAngle / CONSTANTS.DEG_PER_HOUR) - DateTime.Now.Hour;
+            Console.WriteLine("Houroffset: " + hourOffset);
                     second_hand_image.Visibility = Visibility.Visible;
+                    digital_canvas.Visibility = Visibility.Hidden;
                     EnableAnimations();
                     updateTime();
                     updateTimeLabel();
                     synchronizeHands();
-                    (o as DispatcherTimer).Stop();
-                }
-            };
-            timer.Interval = new TimeSpan(0, 0, 2);
-            timer.Start();
+            //        (o as DispatcherTimer).Stop();
+            //    }
+            //};
+            //timer.Interval = new TimeSpan(0, 0, 2);
+            //timer.Start();
         }
 
         private void hourMouseDrag(object sender, MouseEventArgs e)
@@ -135,15 +152,10 @@ namespace SENG403
             {
                 Point currentPoint = Mouse.GetPosition(center_pin_image);
                 Point center = new Point(center_pin_image.ActualWidth/2, center_pin_image.ActualHeight/2);
-                double angle = Math.Atan((currentPoint.Y - center.Y) / (currentPoint.X - center.X));
-                angle = angle * 180 / Math.PI;
-                if (currentPoint.X < center.X)
-                {
-                    angle += 180;
-                }
-                RotateTransform transform = new RotateTransform(angle + 90, hour_hand_image.Width / 2, hour_hand_image.Height);
+                requestedHourAngle = CalculateAngle(currentPoint, center);
+                RotateTransform transform = new RotateTransform(requestedHourAngle, hour_hand_image.Width / 2, hour_hand_image.Height);
                 hour_hand_image.RenderTransform = transform;
-                //TODO drag logic mess with hour offset
+                updateTimeLabel(currMin, (int)(requestedHourAngle / CONSTANTS.DEG_PER_HOUR));
             }
         }
 
@@ -152,44 +164,46 @@ namespace SENG403
         private void minuteMouseDown(object sender, MouseButtonEventArgs e)
         {
             minute_hand_image.CaptureMouse();
+            digital_canvas.Visibility = Visibility.Visible;
             second_hand_image.Visibility = Visibility.Hidden;
             DisableAnimations();
+            requestedMinuteAngle = minuteDegrees;
         }
 
         private void minuteMouseRelease(object sender, MouseButtonEventArgs e)
         {
             minute_hand_image.ReleaseMouseCapture();
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Tick += (o, i) =>
-            {
-                if (Mouse.LeftButton == MouseButtonState.Released && Mouse.RightButton == MouseButtonState.Released)
-                {
+            //DispatcherTimer timer = new DispatcherTimer();
+            //timer.Tick += (o, i) =>
+            //{
+            //    if (Mouse.LeftButton == MouseButtonState.Released && Mouse.RightButton == MouseButtonState.Released)
+            //    {
+                    //TODO update time here
+                    minuteOffset = (int)(requestedMinuteAngle / CONSTANTS.DEG_PER_MIN) - DateTime.Now.Minute;
+            //Console.WriteLine("minoffset: " + minuteOffset);
                     second_hand_image.Visibility = Visibility.Visible;
+                    digital_canvas.Visibility = Visibility.Hidden;
                     EnableAnimations();
                     updateTime();
                     updateTimeLabel();
                     synchronizeHands();
-                    (o as DispatcherTimer).Stop();
-                }
-            };
-            timer.Interval = new TimeSpan(0, 0, 2);
-            timer.Start();
+                    //(o as DispatcherTimer).Stop();
+            //    }
+            //};
+            //timer.Interval = new TimeSpan(0, 0, 2);
+            //timer.Start();
         }
-
+        
         private void minuteMouseDrag(object sender, MouseEventArgs e)
         {
             if (minute_hand_image.IsMouseCaptured)
             {
                 Point currentPoint = Mouse.GetPosition(center_pin_image);
                 Point center = new Point(center_pin_image.ActualWidth / 2, center_pin_image.ActualHeight / 2);
-                double angle = Math.Atan((currentPoint.Y - center.Y) / (currentPoint.X - center.X));
-                angle = angle * 180 / Math.PI;
-                if (currentPoint.X < center.X)
-                {
-                    angle += 180;
-                }
-                RotateTransform transform = new RotateTransform(angle + 90, minute_hand_image.Width / 2, minute_hand_image.Height);
+                requestedMinuteAngle = CalculateAngle(currentPoint, center);
+                RotateTransform transform = new RotateTransform(requestedMinuteAngle, minute_hand_image.Width / 2, minute_hand_image.Height);
                 minute_hand_image.RenderTransform = transform;
+                updateTimeLabel((int)(requestedMinuteAngle / CONSTANTS.DEG_PER_MIN), currHour);
             }
         }
         #endregion
@@ -198,7 +212,9 @@ namespace SENG403
         private void updateTime()
         {
             String[] cultureNames = { "en-US" };
-            currentDateTime = DateTime.Now.AddHours(hourOffset).AddMinutes(minuteOffset);
+            currentDateTime = DateTime.Now.AddHours(hourOffset);
+            currentDateTime = currentDateTime.AddMinutes(minuteOffset);
+            Console.WriteLine(currentDateTime.ToString());
             var culture = new CultureInfo(cultureNames[0]);
             string currentTime = currentDateTime.ToString(culture);
             string[] dateTimeElements = currentTime.Split(' ');
@@ -261,11 +277,28 @@ namespace SENG403
                     computeAngles();
                     renderAngles(RenderMode.RenderMinutes);
                     updateTimeLabel();
+                    fireUpdateTime(GetDate());
                 }
                 if (minuteDegrees % CONSTANTS.DEG_PER_HOUR == 0){   //every minute update
                     renderAngles(RenderMode.RenderHour);
                 }
             }
+        }
+
+        private double CalculateAngle(Point dst, Point src)
+        {
+            double angle = Math.Atan((dst.Y - src.Y) / (dst.X - src.X));
+            angle = angle * 180 / Math.PI;
+            if (dst.X < src.X)
+            {
+                angle += 180;
+            }
+            return angle += 90; //translate to clock-oriented degrees (0 at the top)
+        }
+
+        private void CalculateTime()
+        {
+
         }
 
         private void updateTimeLabel()
@@ -287,6 +320,26 @@ namespace SENG403
                 hour = (currHour + 12).ToString();
             if (currHour == 12 && currMin == 0 && currSec >= 0)
                 fireUpdateTime(GetDate());
+            time_label.Content = hour + " . " + min + " . " + sec;
+        }
+
+        private void updateTimeLabel(double m, double h)
+        {
+            string sec, min, hour;
+            if (currSec < 10)
+                sec = "0" + currSec.ToString();
+            else
+                sec = currSec.ToString();
+            if (m < 10)
+                min = "0" + m.ToString();
+            else
+                min = m.ToString();
+            if (h < 10)
+                hour = "  " + h.ToString();
+            else
+                hour = h.ToString();
+            if (meridiem == "PM")
+                hour = (h + 12).ToString();
             time_label.Content = hour + " . " + min + " . " + sec;
         }
         #endregion
