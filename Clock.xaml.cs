@@ -167,9 +167,13 @@ namespace SENG403
             digital_canvas.Visibility = Visibility.Visible;
             second_hand_image.Visibility = Visibility.Hidden;
             DisableAnimations();
+            Point currentPoint = Mouse.GetPosition(center_pin_image);
+            Point center = new Point(center_pin_image.ActualWidth / 2, center_pin_image.ActualHeight / 2);
+            initAngle = CalculateAngle(currentPoint, center);
             requestedMinuteAngle = minuteDegrees;
         }
-
+        private double initAngle;
+        private int slavedHour;
         private void minuteMouseRelease(object sender, MouseButtonEventArgs e)
         {
             minute_hand_image.ReleaseMouseCapture();
@@ -178,10 +182,11 @@ namespace SENG403
             //{
             //    if (Mouse.LeftButton == MouseButtonState.Released && Mouse.RightButton == MouseButtonState.Released)
             //    {
-                    //TODO update time here
-                    minuteOffset = (int)(requestedMinuteAngle / CONSTANTS.DEG_PER_MIN) - DateTime.Now.Minute;
+            //TODO update time here
+            minuteOffset = (int)(requestedMinuteAngle / CONSTANTS.DEG_PER_MIN) - DateTime.Now.Minute;
+            HourOffset = slavedHour - DateTime.Now.Hour;
             //Console.WriteLine("minoffset: " + minuteOffset);
-                    second_hand_image.Visibility = Visibility.Visible;
+            second_hand_image.Visibility = Visibility.Visible;
                     digital_canvas.Visibility = Visibility.Hidden;
                     EnableAnimations();
                     updateTime();
@@ -203,7 +208,44 @@ namespace SENG403
                 requestedMinuteAngle = CalculateAngle(currentPoint, center);
                 RotateTransform transform = new RotateTransform(requestedMinuteAngle, minute_hand_image.Width / 2, minute_hand_image.Height);
                 minute_hand_image.RenderTransform = transform;
-                updateTimeLabel((int)(requestedMinuteAngle / CONSTANTS.DEG_PER_MIN), currHour);
+
+                //slave the hour hand
+                double delta = requestedMinuteAngle - initAngle;
+
+                double hourdelta = delta / 12;
+                Console.WriteLine(hourdelta);
+                if (delta >= 0)
+                {
+                    if (hourdelta < 0)
+                    {
+                        hourDegrees -= hourdelta;
+                    }
+                    else if (hourdelta > 20)
+                    {
+                        hourDegrees += (30 - hourdelta);
+                    }
+                    else
+                        hourDegrees += hourdelta;
+                }
+
+                if (delta < 0)
+                {
+                    if (hourdelta >= 0)
+                    {
+                        hourDegrees -= hourdelta;
+                    }
+                    else if (hourdelta < -20)
+                        hourDegrees -= (hourdelta + 30);
+                    else
+                        hourDegrees += hourdelta;
+                }
+
+                transform = new RotateTransform(hourDegrees, hour_hand_image.Width / 2, hour_hand_image.Height);
+                hour_hand_image.RenderTransform = transform;
+
+                slavedHour = (int)(hourDegrees / CONSTANTS.DEG_PER_HOUR);
+                updateTimeLabel((int)(requestedMinuteAngle / CONSTANTS.DEG_PER_MIN), slavedHour);
+                initAngle = requestedMinuteAngle;
             }
         }
         #endregion
@@ -294,11 +336,6 @@ namespace SENG403
                 angle += 180;
             }
             return angle += 90; //translate to clock-oriented degrees (0 at the top)
-        }
-
-        private void CalculateTime()
-        {
-
         }
 
         private void updateTimeLabel()
