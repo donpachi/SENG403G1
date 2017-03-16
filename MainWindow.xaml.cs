@@ -21,7 +21,6 @@ using System.Collections.ObjectModel;
 
 namespace SENG403
 {
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -34,12 +33,11 @@ namespace SENG403
         string currentTimeZone = TimeZone.CurrentTimeZone.StandardName;     //standard name of the current timezone
         int currentTimeZoneIndex = -1;                                      //an INDEX which points to an element in the timeZones collection
 
-
         AlarmHandler alarmHandler = new AlarmHandler();
-
         Double snoozeTime = 0;
         Boolean editVal = false;
         Alarm editedAlarm;
+        String iconString;
 
 
         public MainWindow()
@@ -49,6 +47,7 @@ namespace SENG403
 
             InitializeComponent();
             CreateTrayIcon();
+            date_label.Content = Clock.GetDate().Replace(',', ' ');
 
             this.KeyUp += MainWindow_KeyUp;
 
@@ -75,8 +74,8 @@ namespace SENG403
                 }
             }
 
-            Alarm.onRing += onAlarmRing;
-
+            Alarm.onRing += OnAlarmRing;
+            Clock.UpdateTime += UpdateTimeLabel;
         }
 
         // Handle the missed alarm event
@@ -146,7 +145,6 @@ namespace SENG403
         //event method to trigger when the window changes states
         protected override void OnStateChanged(EventArgs e)
         {
-
             base.OnStateChanged(e);
         }
 
@@ -164,7 +162,6 @@ namespace SENG403
         {
             if (this.WindowState == WindowState.Minimized)
             {
-                ni.Visible = false;
                 this.Show();
                 this.WindowState = WindowState.Maximized;
                 ClockUC.EnableAnimations();
@@ -181,7 +178,7 @@ namespace SENG403
         }
 
 
-        public void onAlarmRing()
+        private void OnAlarmRing()
         {
             MaximizeWindow();
             Console.WriteLine("ring");
@@ -191,18 +188,22 @@ namespace SENG403
             buttonSnoozeAlarm.Visibility = Visibility.Visible;
         }
 
+        private void UpdateTimeLabel(object sender, String args)
+        {
+            date_label.Content = args.Replace(',', ' ');
+        }
+
         private void CreateTrayIcon()
         {
             ni = new System.Windows.Forms.NotifyIcon();
-            ni.Icon = new System.Drawing.Icon("Resource/Main.ico");
+            ni.Icon = new Icon("Resource/Main.ico");
             ni.Visible = true;
-            ni.DoubleClick +=
-                delegate (object sender, EventArgs args)
-                {
-                    this.Show();
-                    MaximizeWindow();
-                };
-
+            ni.DoubleClick += (s, a) =>
+            {
+                this.Show();
+                MaximizeWindow();
+            };
+            ni.Text = "Alarm Clock";
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
