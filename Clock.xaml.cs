@@ -36,7 +36,7 @@ namespace SENG403
     public partial class Clock : UserControl
     {
         private static double hourOffset = 0;
-        public double HourOffset { get { return hourOffset; } set {hourOffset = value; } }
+        public static double HourOffset { get { return hourOffset; } set {hourOffset = value; } }
         public double degreeInterval;
         DispatcherTimer dTimer;
         private double secondDegrees, minuteDegrees, hourDegrees;
@@ -97,7 +97,7 @@ namespace SENG403
             timestring = dateTimeElements[1];
             meridiem = dateTimeElements[2];
             string[] timeElements = dateTimeElements[1].Split(':');
-            currHour = hourOffset + Convert.ToDouble(timeElements[0]);               //add UTC offset from time zone
+            currHour = (hourOffset + Convert.ToDouble(timeElements[0])) % 24;               //add UTC offset from time zone
             currMin = Convert.ToDouble(timeElements[1]);
             currSec = Convert.ToDouble(timeElements[2]);
         }

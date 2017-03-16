@@ -33,7 +33,7 @@ namespace SENG403
         ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();     //acquire the collection of timezones (from system)
         string currentTimeZone = TimeZone.CurrentTimeZone.StandardName;     //standard name of the current timezone
         int currentTimeZoneIndex = -1;                                      //an INDEX which points to an element in the timeZones collection
-
+        string nativeTimeZone = TimeZone.CurrentTimeZone.StandardName;      //keep this unchanged for reference
 
         AlarmHandler alarmHandler = new AlarmHandler();
 
@@ -65,12 +65,12 @@ namespace SENG403
             //update the comboBox with the current timezone so that on startup it is not blank
             for (int i = 0; i < timeZones.Count; i++)
             {
-                //TODO uncomment comboBoxTimeZone.Items.Add(timeZones[i]);
+                comboBoxTimeZone.Items.Add(timeZones[i]);
                 string stdName = timeZones[i].StandardName;
 
                 if (stdName.Equals(currentTimeZone))
                 {
-                    //TODO uncomment comboBoxTimeZone.Text = timeZones[i].ToString();
+                    comboBoxTimeZone.Text = timeZones[i].ToString();
                     currentTimeZoneIndex = i;
                 }
             }
@@ -255,7 +255,7 @@ namespace SENG403
             else { alarmDaysChecked += "0"; }
 
             String message = messageBox.Text;
-            //TEMPRORARY/ROUGH to make functionality work:
+            //TEMPORARY/ROUGH to make functionality work:
             DateTime theTime = new System.DateTime(Clock.Now().Year, Clock.Now().Month,
                 Clock.Now().Day, theHour, theMinute, 0);
 
@@ -489,18 +489,34 @@ namespace SENG403
         /// <param name="e"></param>
         private void dropDownClosed(object sender, EventArgs e)
         {
+            TimeSpan oldOffset = timeZones[currentTimeZoneIndex].BaseUtcOffset;
+            int t_old = oldOffset.Hours;
+
             //if time zone selection is different, update the time and the current time zone
-            //TODO uncomment if (!comboBoxTimeZone.SelectedItem.Equals(timeZones[currentTimeZoneIndex]))
-            //{
-            //    currentTimeZoneIndex = comboBoxTimeZone.SelectedIndex;
-            //    Console.WriteLine("-NEW SELECTION, index = "+currentTimeZoneIndex);
-            //    currentTimeZone = timeZones[currentTimeZoneIndex].StandardName;
-            //    //time.HourOffset = timeZones[currentTimeZones]
+            if (!comboBoxTimeZone.SelectedItem.Equals(timeZones[currentTimeZoneIndex]))
+            {
+                currentTimeZoneIndex = comboBoxTimeZone.SelectedIndex;
+                Console.WriteLine("-NEW SELECTION, index = "+currentTimeZoneIndex);
+                currentTimeZone = timeZones[currentTimeZoneIndex].StandardName;
+
+                int newOffset;
+
+                if (currentTimeZone.Equals(nativeTimeZone)) { newOffset = 0; }
+                else
+                {
+                    TimeSpan offset = timeZones[currentTimeZoneIndex].BaseUtcOffset;
+                    int t = offset.Hours;
+                    newOffset = ((t_old - t) * -1) ;
+                }
+
+                Console.WriteLine("New offset delta: " + newOffset);
+                Console.WriteLine("Old hour offset: " + Clock.HourOffset);
+                Clock.HourOffset = newOffset;
                 
-            //}
-            //Console.WriteLine("currentTimeZone: "+currentTimeZone);
-            //Console.WriteLine("timeZones[currentTimeZoneIndex]: " + timeZones[currentTimeZoneIndex]);
-            //Console.WriteLine("selectedItem: "+comboBoxTimeZone.SelectedItem);
+            }
+            Console.WriteLine("currentTimeZone: "+currentTimeZone);
+            Console.WriteLine("timeZones[currentTimeZoneIndex]: " + timeZones[currentTimeZoneIndex]);
+            Console.WriteLine("selectedItem: "+comboBoxTimeZone.SelectedItem);
 
         }
     }
