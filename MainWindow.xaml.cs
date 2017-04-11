@@ -147,6 +147,10 @@ namespace SENG403
                     if (daysConverted.Equals("Su. Mo. Tu. We. Th. Fr. Sa. "))
                     {
                         daysConverted = "Daily";
+                    } else if (daysConverted.Equals(""))
+                    {
+                        daysConverted = "Today Only";
+              
                     }
                     alarmList.Items.Add(nextAlarm + "\nDays: " + daysConverted + "\n");
             }

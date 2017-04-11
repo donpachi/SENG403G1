@@ -34,8 +34,8 @@
                 <CheckBox x:Name="checkBox_Wednesday" Content="Wednesday" Foreground="White" Canvas.Top="60.294" FontSize="16"/>
                 <CheckBox x:Name="checkBox_Thursday" Content="Thursday" Foreground="White" Canvas.Top="80.392" FontSize="16"/>
                 <CheckBox x:Name="checkBox_Friday" Content="Friday" Foreground="White" Canvas.Top="100.49" FontSize="16"/>
-                <CheckBox x:Name="checkBox_Saturday" Content="Saturday" Foreground="White" Canvas.Top="120.588" FontSize="16"/>
-                <TextBox x:Name="messageBox" Height="25" TextWrapping="Wrap" Text="No Message Set" Width="224" Canvas.Top="168" FontSize="16"/>
+                <CheckBox x:Name="checkBox_Saturday" Content="Saturday" Foreground="White" Canvas.Top="125" FontSize="16" Canvas.Left="-1"/>
+                <TextBox x:Name="messageBox" Height="25" TextWrapping="Wrap" Text="No Message Set" Width="234" Canvas.Top="168" FontSize="16"/>
             </Canvas>
             <Canvas x:Name="canvasSnoozeOptions" Height="136" Canvas.Left="1713" Canvas.Top="593" Width="108">
                 <RadioButton x:Name="radioButton_1min" Content="1   Minute" Foreground="White" Checked="select1Min" FontSize="16"/>
@@ -50,11 +50,11 @@
                      VerticalContentAlignment="Center" HorizontalContentAlignment="Center" LostFocus="HourEntryLostFocus"/>
             <TextBox x:Name="textBoxMinuteEntry" Height="100" Canvas.Left="1689" TextWrapping="Wrap" Canvas.Top="314" Width="99" FontSize="48" MaxLength="2" TextAlignment="Center"
                      VerticalContentAlignment="Center" HorizontalContentAlignment="Center" LostFocus="MinuteEntryLostFocus"/>
-            <Label x:Name="labelDays" Content="Days" Canvas.Left="1561" Canvas.Top="530" Foreground="White" FontSize="20"/>
-            <Label x:Name="labelSnooze" Content="Snooze" Canvas.Left="1713" Canvas.Top="530" Foreground="White" FontSize="20"/>
+            <Label x:Name="labelDays" Content="Days" Canvas.Left="1560" Canvas.Top="551" Foreground="White" FontSize="20"/>
+            <Label x:Name="labelSnooze" Content="Snooze" Canvas.Left="1713" Canvas.Top="551" Foreground="White" FontSize="20"/>
             <Label x:Name="labelColon" Content=":" Canvas.Left="1664" Canvas.Top="327" Foreground="White" FontSize="48"/>
             <Button x:Name="buttonConfirmAlarm" Content="Confirm" Canvas.Left="1561" Canvas.Top="846" Width="170" Height="46" Click="clickButtonConfirm" FontSize="16"/>
-            <Button x:Name="button" Content="Cancel" Canvas.Left="1744" Canvas.Top="846" Width="53" Height="46"  Click="clickButtonCancel" FontSize="16"/>
+            <Button x:Name="button" Content="Cancel" Canvas.Left="1744" Canvas.Top="846" Width="59" Height="46"  Click="clickButtonCancel" FontSize="16"/>
             <ComboBox x:Name="comboBoxSounds" Canvas.Left="1560" Canvas.Top="476" Width="228" FontSize="16"/>
             <Label x:Name="labelSnooze_Copy" Content="Sound" Canvas.Left="1561" Canvas.Top="440" Foreground="White" FontSize="16"/>
         </Canvas>
