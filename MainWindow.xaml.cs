@@ -439,18 +439,26 @@ namespace SENG403
 
         private void deleteClick(object sender, RoutedEventArgs e)
         {
-            string selectedAlarm = alarmList.SelectedItem.ToString();
-            if (selectedAlarm == null) { return; }
-            else
+            try
             {
-                for (int n = 1; n <= alarmHandler.getAlarms().Length; n++)
+                string selectedAlarm = alarmList.SelectedItem.ToString();
+                if (selectedAlarm == null) { return; }
+                else
                 {
-                    if (selectedAlarm.Contains("Alarm " + n))
+                    for (int n = 1; n <= alarmHandler.getAlarms().Length; n++)
                     {
-                        alarmHandler.deleteAlarm(alarmHandler.getAlarms()[n - 1]);
-                        updateAlarmsList();
+                        if (selectedAlarm.Contains("Alarm " + n))
+                        {
+                            alarmHandler.deleteAlarm(alarmHandler.getAlarms()[n - 1]);
+                            updateAlarmsList();
+                        }
                     }
                 }
+            }
+            catch (Exception)
+            {
+
+                Console.WriteLine("exception");
             }
         }
 
