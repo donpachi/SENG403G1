@@ -144,6 +144,10 @@ namespace SENG403
                 String nextAlarm = "Alarm " + (i + 1) + ": " + theAlarms[i].getDateTime();
                 //only add the alarm if it isn't in the list already
                 if (!alarmList.Items.Contains(nextAlarm))
+                    if (daysConverted.Equals("Su. Mo. Tu. We. Th. Fr. Sa. "))
+                    {
+                        daysConverted = "Daily";
+                    }
                     alarmList.Items.Add(nextAlarm + "\nDays: " + daysConverted + "\n");
             }
         }
