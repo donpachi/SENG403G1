@@ -141,10 +141,10 @@ namespace SENG403
                     }
                 }
 
-                String nextAlarm = "Alarm " + (i + 1) + ": " + theAlarms[i].getDateTime() + " " + daysConverted;
+                String nextAlarm = "Alarm " + (i + 1) + ": " + theAlarms[i].getDateTime();
                 //only add the alarm if it isn't in the list already
                 if (!alarmList.Items.Contains(nextAlarm))
-                    alarmList.Items.Add(nextAlarm);
+                    alarmList.Items.Add(nextAlarm + "\nDays: " + daysConverted + "\n");
             }
         }
 
