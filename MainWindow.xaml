@@ -62,8 +62,8 @@
         <ToggleButton x:Name="toggleDisplayButton" Content="Digital" Canvas.Left="1282" Canvas.Top="1020" Width ="126" Height="50" Click="displayModeToggle" FontSize="18"/>
         <Button x:Name="closeButton" Content="X" Canvas.Left="1359" Canvas.Top="10" Width="53" Click="closeApplicationClick" Height="47"/>
         <Button x:Name="minimizeButton" Content="--" Canvas.Left="1282" Canvas.Top="10" Width="53" Click="minimizeApplicationClick" Height="47"/>
-        <Label x:Name="missedAlarmNotification" Content="Missed Alarm!" Canvas.Left="32" Canvas.Top="34" Height="96" Width="194" Background="#FFE0D4D4" FontSize="25" Visibility="Hidden"/>
-        <Button x:Name="dismissButton" Content="Dismiss" Canvas.Left="32" Canvas.Top="100" Width="120" Height="30" Visibility="Hidden" Click="dismissButton_Click"/>
+        <Label x:Name="missedAlarmNotification" Content="Missed Alarm!" Canvas.Left="32" Canvas.Top="34" HorizontalContentAlignment="Center" Height="96" Width="194" Background="#FFDDDDDD" FontSize="25" Visibility="Hidden" BorderBrush="Black" BorderThickness="2"/>
+        <Button x:Name="dismissButton" Content="Dismiss" Canvas.Left="67" Canvas.Top="91" Width="120" Height="30" Visibility="Hidden" Click="dismissButton_Click" Background="White"/>
 
     </Canvas>
 </Window>

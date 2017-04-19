@@ -15,12 +15,6 @@ namespace SENG403
 
     public class AlarmHandler
     {
-        static public event EventHandler CustomEvent;
-
-        static public void RaiseMyCustomEvent(object sender, EventArgs args)
-        {
-            if (CustomEvent != null) CustomEvent(sender, args);
-        }
 
         // Create a list of Alarms
         public List<Alarm> alarmList;
@@ -34,8 +28,8 @@ namespace SENG403
         {
             // The Currently RINGING alarm, if applicable
             this.currentAlarm = null;
-            //Properties.Settings.Default.Reset();
 
+            // Initializes a new list of alarms on the local machine
             if (Properties.Settings.Default.alarmArray == null)
             {
                 Properties.Settings.Default.alarmArray = new List<string>();
@@ -70,6 +64,7 @@ namespace SENG403
         {
             List<Alarm> list = new List<Alarm>();
 
+            // Iterate over each entry in the local list and populate the current alarm list
             foreach (String setting in Properties.Settings.Default.alarmArray)
             {
                 string[] split = setting.Split('\n');
@@ -79,8 +74,6 @@ namespace SENG403
                 SoundModule sm = new SoundModule();
                 sm.setSound(split[5]);
                 String message = split[6];
-
-                // TEMPORARY FIX? -Austin
                 string t = "";
 
                 Alarm alarm = new Alarm(time, days, sm, t);
@@ -156,7 +149,7 @@ namespace SENG403
         }
 
         /// <summary>
-        /// Tick event that occurs every one second
+        /// Tick event that occurs every one second. Check every alarm to see if it is time to set it off.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -244,8 +237,6 @@ namespace SENG403
         }
     }
 
-
-
     /// <summary>
     /// Alarm object containing all relevant information as to when the alarm goes off and what alarm sound it plays.
     /// </summary>
@@ -290,6 +281,10 @@ namespace SENG403
             if (days != "0000000") { repeat = true; }
         }
 
+        /// <summary>
+        /// Return the message set for this alarm.
+        /// </summary>
+        /// <returns>Message set to this alarm.</returns>
         public String getMessage() { return message; }
 
         public void setMessage(String msg)
@@ -405,7 +400,16 @@ namespace SENG403
         /// <returns></returns>
         public String getSound() { return this.alarmSound.currentSound; }
 
+        /// <summary>
+        /// Return the hour this alarm is set to go off.
+        /// </summary>
+        /// <returns></returns>
         public int getHour() { return this.settime.Hour; }
+
+        /// <summary>
+        /// Return the minute this alarm is set to go off.
+        /// </summary>
+        /// <returns></returns>
         public int getMinute() { return this.settime.Minute; }
     }
 }

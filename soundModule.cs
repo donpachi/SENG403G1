@@ -92,10 +92,6 @@ namespace SENG403
         public void loadSounds()
         {
             availableSounds = Directory.GetFiles("Sounds", "*.wav");      //access two directories up to the sounds folder
-
-            // stretch goal: create a popup that informs the user that the sounds folder has no .wav files in it.
-
-            // for debugging
             for (int i = 0; i < availableSounds.Length; i++)
             {
                 System.Diagnostics.Debug.WriteLine(availableSounds[i]);

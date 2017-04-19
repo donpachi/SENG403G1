@@ -27,21 +27,22 @@ namespace SENG403
     public partial class MainWindow : Window
     {
         System.Windows.Forms.NotifyIcon ni;
-        SoundModule sound = new SoundModule();         //base sound module to be copied into each alarm
-                                                       // (each alarm gets their own instance which can be set accordingly)
-        ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();     //acquire the collection of timezones (from system)
-        string currentTimeZone = TimeZone.CurrentTimeZone.StandardName;     //standard name of the current timezone
-        int currentTimeZoneIndex = -1;                                      //an INDEX which points to an element in the timeZones collection
-
-        string nativeTimeZone = TimeZone.CurrentTimeZone.StandardName;      //keep this unchanged for reference
+        SoundModule sound = new SoundModule();         // Base sound module to be copied into each alarm
+        ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();     // Acquire the collection of timezones (from system)
+        string currentTimeZone = TimeZone.CurrentTimeZone.StandardName;     // Standard name of the current timezone
+        int currentTimeZoneIndex = -1;                                      // An INDEX which points to an element in the timeZones collection
+        string nativeTimeZone = TimeZone.CurrentTimeZone.StandardName;
         int nativeTimeZoneIndex = -1;
         bool nativeInDSaving = false;
 
-        AlarmHandler alarmHandler = new AlarmHandler();
+        AlarmHandler alarmHandler = new AlarmHandler(); // The main alarm handler object for this program
         Double snoozeTime = 0;
         Boolean editVal = false;
         Alarm editedAlarm;
 
+        /// <summary>
+        /// Main window of the system.
+        /// </summary>
         public MainWindow()
         {
             MissedAlarmHandler.MissedAlarm += handleMissedAlarm;
@@ -52,7 +53,7 @@ namespace SENG403
 
             this.KeyUp += MainWindow_KeyUp;
 
-            // populate sounds comboBox with available .wav files in Sound directory
+            // Populate sounds comboBox with available .wav files in Sound directory
             string[] availableSounds = sound.getSounds();
             for (int i = 0; i < availableSounds.Length; i++)
             {
@@ -61,8 +62,8 @@ namespace SENG403
 
             updateAlarmsList();
 
-            //populate the timezones combobox with all available timezones
-            //update the comboBox with the current timezone so that on startup it is not blank
+            // Populate the timezones combobox with all available timezones
+            // Update the comboBox with the current timezone so that on startup it is not blank
             for (int i = 0; i < timeZones.Count; i++)
             {
                 comboBoxTimeZone.Items.Add(timeZones[i]);
@@ -77,25 +78,23 @@ namespace SENG403
                 }
             }
 
-            //boolean flag to see if native time zone is currently in daylight saving time
+            // Boolean flag to see if native time zone is currently in daylight saving time
             nativeInDSaving = timeZones[nativeTimeZoneIndex].IsDaylightSavingTime(Clock.Now());
 
             Alarm.onRing += OnAlarmRing;
             Clock.UpdateTime += UpdateTimeLabel;
         }
 
-        // Handle the missed alarm event
-        // Add 'async' before void if we want to implement notification screen disappearing after X seconds
+        /// <summary>
+        /// Handle a missed alarm event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void handleMissedAlarm(object sender, EventArgs e)
         {
             // Show the screen that says missed alarm
             missedAlarmNotification.Visibility = Visibility.Visible;
             dismissButton.Visibility = Visibility.Visible;
-
-            // Wait 5 seconds and then hide the screen
-            //await Task.Delay(5000);
-            //missedAlarmNotification.Visibility = Visibility.Hidden;
-
         }
 
         /// <summary>
@@ -142,7 +141,7 @@ namespace SENG403
                 }
 
                 String nextAlarm = "Alarm " + (i + 1) + ": " + theAlarms[i].getDateTime();
-                //only add the alarm if it isn't in the list already
+                // Only add the alarm if it isn't in the list already
                 if (!alarmList.Items.Contains(nextAlarm))
                     if (daysConverted.Equals("Su. Mo. Tu. We. Th. Fr. Sa. "))
                     {
@@ -156,12 +155,18 @@ namespace SENG403
             }
         }
 
-        //event method to trigger when the window changes states
+        /// <summary>
+        /// Event method to trigger when the wnidow changes states
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnStateChanged(EventArgs e)
         {
             base.OnStateChanged(e);
         }
 
+        /// <summary>
+        /// Method to handle window minimzation to tray.
+        /// </summary>
         private void MinimizeWindow()
         {
             if (this.WindowState == WindowState.Maximized || this.WindowState == WindowState.Normal)
@@ -172,6 +177,9 @@ namespace SENG403
             }
         }
 
+        /// <summary>
+        /// Method to handle window maximation to screen.
+        /// </summary>
         private void MaximizeWindow()
         {
             if (this.WindowState == WindowState.Minimized)
@@ -184,7 +192,11 @@ namespace SENG403
 
 
 
-        // Once the window has been closed, update the settings
+        /// <summary>
+        /// Once the window has been closed, update the screen.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             alarmHandler.populateSettings();
@@ -192,6 +204,9 @@ namespace SENG403
         }
 
 
+        /// <summary>
+        /// When an alarm is ringing, handle UI and logic for a ringing alarm.
+        /// </summary>
         private void OnAlarmRing()
         {
             MaximizeWindow();
@@ -202,11 +217,19 @@ namespace SENG403
             buttonSnoozeAlarm.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Update the time label.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void UpdateTimeLabel(object sender, String args)
         {
             date_label.Content = args.Replace(',', ' ');
         }
 
+        /// <summary>
+        /// Create a tray icon of the alarm.
+        /// </summary>
         private void CreateTrayIcon()
         {
             ni = new System.Windows.Forms.NotifyIcon();
@@ -220,6 +243,11 @@ namespace SENG403
             ni.Text = "Alarm Clock";
         }
 
+        /// <summary>
+        /// Close the window if the user pressed escape.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
@@ -233,7 +261,11 @@ namespace SENG403
             }
         }
 
-        // Get all set values on the interface and send them to the alarm class to make an alarm
+        /// <summary>
+        /// Collect all entered values in UI and enter them to create an alarm object.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void clickButtonConfirm(object sender, RoutedEventArgs e)
         {
             SoundModule newSound = new SoundModule();
@@ -271,15 +303,12 @@ namespace SENG403
                 else { alarmDaysChecked += "0"; }
 
                 String message = messageBox.Text;
-                //TEMPORARY/ROUGH to make functionality work:
                 DateTime theTime = new System.DateTime(Clock.Now().Year, Clock.Now().Month,
                     Clock.Now().Day, theHour, theMinute, 0);
 
                 // set the sound for the alarm being created (selected from comboBox)
                 string selectedSound = comboBoxSounds.Text;
                 newSound.setSound(selectedSound);
-
-                //TODO: need to pass in snooze time
 
                 // create new alarm object
                 alarmHandler.setNewAlarm(theTime, alarmDaysChecked, newSound, message);
@@ -314,6 +343,11 @@ namespace SENG403
 
         }
 
+        /// <summary>
+        /// If user presses cancel, update UI.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void clickButtonCancel(object sender, RoutedEventArgs e)
         {
             resetAlarmPanel();
@@ -324,7 +358,7 @@ namespace SENG403
             comboBoxTimeZone.Visibility = Visibility.Visible;
         }
 
-        //-------------------------------------------------------------radiobuttons
+        #region Radio Buttons
         // Selected the 1 minute snooze radio button for an alarm
         private void select1Min(object sender, RoutedEventArgs e) { snoozeTime = 1; }
 
@@ -345,13 +379,14 @@ namespace SENG403
 
         // Selected the 60 minute snooze radio button for an alarm
         private void select60Mins(object sender, RoutedEventArgs e) { snoozeTime = 60; }
-        //-------------------------------------------------------------end radiobuttons
-        //=================================================================== end alarm set screen
+        #endregion Radio Buttons
 
 
-
-        //=================================================================== active alarm screen listeners
-        // Listener for when the snooze button is pressed
+        /// <summary>
+        /// Listener for when snooze is pressed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void clickSnooze(object sender, RoutedEventArgs e)
         {
             alarmHandler.getCurrentAlarm().snooze(snoozeTime);
@@ -361,7 +396,11 @@ namespace SENG403
             buttonSnoozeAlarm.Visibility = Visibility.Hidden;
         }
 
-        // Listener for the Dismiss button
+        /// <summary>
+        /// Listener for when dismiss is pressed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void clickDismiss(object sender, RoutedEventArgs e)
         {
             Alarm ringingAlarm = alarmHandler.getCurrentAlarm();
@@ -374,13 +413,14 @@ namespace SENG403
             alarmHandler.currentAlarm = null;
             updateAlarmsList();
         }
-        //=================================================================== end active alarm screen listeners
-
 
         #region Display functions
-        //=================================================================== time display screen listeners
-        // Listener for when the toggleButton is checked
-        // when clicked, if state is analog, switch to digital. Else switch to analog.
+
+        /// <summary>
+        /// Listener for when Analog/digital is pressed. Toggle to the selected display.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void displayModeToggle(object sender, RoutedEventArgs e)
         {
             if (ClockUC.analog_canvas.IsVisible)
@@ -397,8 +437,11 @@ namespace SENG403
             }
         }
 
-        // Listener for the set alarm button
-        // Hides the Time Display base canvas and makes the set alarm canvas visible
+        /// <summary>
+        /// Listener for the set alarm button. Hides the time display base canvas and makes the set alarm canvas visible.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void gotoSetAlarm(object sender, RoutedEventArgs e)
         {
             alarmList.Visibility = Visibility.Hidden;
@@ -416,11 +459,14 @@ namespace SENG403
         {
 
         }
-        //=================================================================== end time display screen listeners
         #endregion
 
 
-        //listener for selecting an alarm in the alarm UI list
+        /// <summary>
+        /// Listener for selecting an alarm item from the display.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void selectedAlarmItem(object sender, SelectionChangedEventArgs e)
         {
             buttonEditAlarm.Visibility = Visibility.Visible;
@@ -454,6 +500,11 @@ namespace SENG403
             }
         }
 
+        /// <summary>
+        /// Handle edit alarm button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void editClick(object sender, RoutedEventArgs e)
         {
             alarmList.Visibility = Visibility.Hidden;
@@ -501,6 +552,9 @@ namespace SENG403
             }
         }
 
+        /// <summary>
+        /// Reset alarm panel.
+        /// </summary>
         private void resetAlarmPanel()
         {
             messageBox.Text = "No Message Set";
@@ -516,6 +570,11 @@ namespace SENG403
             comboBoxSounds.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Handle a dismiss button click.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dismissButton_Click(object sender, RoutedEventArgs e)
         {
             // Show the screen that says missed alarm
@@ -536,12 +595,11 @@ namespace SENG403
             OnTimeZoneChange(offset);
         }
 
-        //TODO Austin, tips for your bug
-        ///Austin - There's no need to calculate the old offset, the clock class automatically takes care of offsets through the DateTime structure.
-        ///all you need to do is calculate the offset of the selected timezone index from the current system timezone, not the last selected timezone.
-        ///This is where your bug lies.     -Aaron
-        ///
-        //I think this is good now? -Austin
+        /// <summary>
+        /// Handle drop-down close.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dropDownClosed(object sender, EventArgs e)
         {
             //if time zone selection is different, update the time and the current time zone
@@ -574,15 +632,14 @@ namespace SENG403
                 ClockUC.HourOffset = newOffset;
                 TimeZoneChanged(newOffset); //changed this to event so the clock can update the hands itself
             }
-            /*
-            Console.WriteLine("currentTimeZone: "+currentTimeZone);
-            Console.WriteLine("timeZones[currentTimeZoneIndex]: " + timeZones[currentTimeZoneIndex]);
-            Console.WriteLine("selectedItem: "+comboBoxTimeZone.SelectedItem);
-            */
-
         }
 
 
+        /// <summary>
+        /// Listener for hour entry box lost focus.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HourEntryLostFocus(object sender, RoutedEventArgs e)
         {
             try

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SENG403
 {
+    /// <summary>
+    /// Handle a missed alarm event.
+    /// </summary>
     public class MissedAlarmHandler
     {
         static public event EventHandler MissedAlarm;
